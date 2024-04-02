@@ -1,0 +1,80 @@
+
+.wp360_main_dashboard{
+    .wp360_banner{
+        background-color: #fff;
+        padding: 24px 20px 12px 45px;
+        margin-left: -20px;
+        padding-right: 20px;
+        .wp360_logo{
+            img{
+                max-width: 90px;
+            }
+        }
+    }
+    .wp360_content{
+        max-width: 720px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        margin-top: 30px;
+        .head{
+            border-bottom: 1px solid #d6d4d4;
+            a{
+                list-style: none;
+            }
+        }
+        .inner_list{
+            display: flex;
+            align-items: flex-start;
+             &:not(:last-child){
+                padding: 24px 0;
+                border-bottom: 1px solid #dcdcdc;
+             }
+             &.active{
+                padding-top: 30px;
+             }
+             .wrapitem{
+                width: calc(100% - 50px);
+                .link{
+                    margin-top: 30px;
+                    a{
+                        background-color: #004C6D;
+                        color: #FDFDFD;
+                        font-size: 16px;
+                        padding: 10px 22px;
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-align: center;
+                        -ms-flex-align: center;
+                        align-items: center;
+                        text-decoration: none;
+                        border-radius: 10px;
+                        -webkit-transition: ease all 1s;
+                        transition: ease all 1s;
+                        max-width: 100px;
+                    }
+                }
+             }
+
+            .content{
+                h3{
+                    margin-top: 0;
+                }
+            }
+            .icons{
+                position: relative;
+                width: 50px;
+                span{
+                    width: 30px;
+                    height: 30px;
+                    background-color: #004C6D;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    content: '';
+                    position: absolute;
+                }
+            }
+        }
+    }
+}

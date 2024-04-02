@@ -1,0 +1,120 @@
+.wp360-invoice-addInvoice {
+  padding: 50px 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.wp360-invoice-addInvoice form {
+  width: 100%;
+  max-width: 600px;
+}
+
+.wp360-invoice-addInvoice .wp360_invoice_addInvoiceItemCon {
+  width: 100%;
+}
+.wp360-invoice-addInvoice .invoiceFormInn {
+  width: 100%;
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+.wp360-invoice-addInvoice .invoiceFormInn.wp360_invoice_itemsCon {
+  flex-wrap: wrap;
+}
+.wp360-invoice-addInvoice .invoiceFormInn.radioButtonCon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: baseline;
+}
+.wp360-invoice-addInvoice .invoiceFormInn.radioButtonCon h3 {
+  font-weight: normal;
+  width: 100%;
+  margin: 0 0 10px;
+}
+.wp360-invoice-addInvoice .invoiceFormInn.radioButtonCon .radioButtons {
+  display: flex;
+  align-items: center;
+}
+.wp360-invoice-addInvoice .invoiceFormInn.radioButtonCon .radioButtons label {
+  margin-right: 10px;
+}
+.wp360-invoice-addInvoice .invoiceFormInn .wp360_invoiceItem {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.wp360-invoice-addInvoice form .button {
+  background-color: #007cba;
+  color: #fff;
+}
+.wp360-invoice-addInvoice form .selectFieldStyle {
+  max-width: 600px;
+  padding: 6px 30px 6px 10px;
+  background-color: #f6f7f7;
+  border: 1px solid #c3c4c7;
+}
+.wp360-invoice-addInvoice form .textFieldStyle {
+  width: 100%;
+  max-width: 600px;
+  padding: 6px 10px;
+  background-color: #f6f7f7;
+  border: 1px solid #c3c4c7;
+}
+.wp360-invoice-addInvoice form .textAreaStyle {
+  width: 100%;
+  max-width: 600px;
+  padding: 6px 10px;
+  background-color: #f6f7f7;
+  border: 1px solid #c3c4c7;
+  height: 150px;
+}
+.wp360-invoice-addInvoice form .halfWidth {
+  width: calc(50% - 10px);
+}
+.wp360-invoice-addInvoice form .oneThirdWidth {
+  width: calc(33% - 10px);
+}
+.wp360-invoice-addInvoice .disableField {
+  background-color: #c3c4c7 !important;
+}
+
+.wp360-invoice-settings ._CISettingIn {
+  width: 100%;
+  background-color: #fff;
+  display: block;
+  padding: 20px 30px;
+  margin-top: 30px;
+  box-sizing: border-box;
+}
+.wp360-invoice-settings ._CISettingIn h2 {
+  color: #007cba;
+  text-transform: uppercase;
+}
+.wp360-invoice-settings ._CISettingIn table {
+  border-spacing: 0;
+  width: 100%;
+  border: none;
+}
+.wp360-invoice-settings ._CISettingIn table th {
+  text-align: left;
+  font-weight: 600;
+  width: 200px;
+  padding: 10px 20px 10px 0;
+  vertical-align: top;
+}
+.wp360-invoice-settings ._CISettingIn table td {
+  padding: 10px 0;
+  vertical-align: top;
+}
+.wp360-invoice-settings ._CISettingIn table form {
+  max-width: 600px;
+}
+
+.wp360-inovice-hideElm {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  z-index: -1;
+}/*# sourceMappingURL=admin_style.css.map */
