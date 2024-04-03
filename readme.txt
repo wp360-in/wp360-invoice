@@ -10,7 +10,7 @@ Requires PHP: 7.4.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The WP360 Invoice Plugin provides an intuitive solution to manage and create invoices seamlessly for WooCommerce websites. .
+The WP360 Invoice Plugin provides an intuitive solution to manage and create invoices seamlessly for WooCommerce websites. clone
 
 == Description ==
 The WP360 Invoice Plugin simplifies invoice management for WooCommerce websites with a user-friendly interface, centralized admin control, and client access to view and print their invoices.
