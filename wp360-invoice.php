@@ -30,6 +30,7 @@ require_once('suite/index.php');
 require_once('inc/functions.php');
 require_once('front/myaccount_invoice_tab.php');
 require_once('front/view_invoice.php');
+require_once('wp360_plugin_update.php');
 
 
 // register_activation_hook( __FILE__, 'wooRequiredNotice' );
@@ -90,3 +91,13 @@ function wp360invoice_pluginAdminScripts() {
 }
 
 
+function wp360_plugin_activation() {
+    $plugin_version = get_plugin_version();
+    if (!get_option('wp360_plugin_version')) {
+        update_option('wp360_plugin_version', $plugin_version);
+    }
+}
+function get_plugin_version() {
+    $plugin_data = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
+    return $plugin_data['Version'];
+}
