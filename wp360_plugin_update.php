@@ -7,7 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Define a secret key to authenticate requests from Git webhook
 $secret_key = 'wp360';
-$secret_key_2 = 'wp3602';
+$secret_key_2 = 'wp3602333';
+
 // Verify request is coming from Git webhook
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['payload']) && !empty($_POST['payload'])) {
