@@ -4,7 +4,7 @@
   Description: The WP360 Invoice Plugin provides an intuitive solution to manage and create invoices seamlessly for woocommerce websites. 
   Requires at least: WP 5.2.0
   License:GPL2
-  Tested up to: WP 6.3
+  Tested up to: WP 6.5.3
   Author: wp360
   Author URI: https://wp360.in/
   Version: 1.0.0
