@@ -1,4 +1,10 @@
 $color1 : #007cba;
+
+
+tr.plugin-update-tr[data-plugin="wp360-invoice/wp360-invoice.php"] {
+    display: none;
+}
+
 .wp360-invoice-addInvoice{
     padding: 50px 0;
     display: flex;

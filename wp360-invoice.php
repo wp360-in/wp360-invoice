@@ -1,13 +1,13 @@
 <?php
 /*
   Plugin Name: Wp360 Invoice
-  Description: The WP360 Invoice Plugin provides an intuitive solution to manage and create invoices seamlessly for woocommerce websites. 
+  Description: The WP360 Invoice Plugin provides an intuitive solution to manage and create invoices seamlessly for woocommerce websites checking everywhere. 
   Requires at least: WP 5.2.0
   License:GPL2
-  Tested up to: WP 6.5.3
+  Tested up to: WP 6.5.6
   Author: wp360
   Author URI: https://wp360.in/
-  Version: 1.0.0
+  Version: 1.1.3
   Text Domain: wp360-invoice
  */
 
@@ -30,9 +30,11 @@ require_once('suite/index.php');
 require_once('inc/functions.php');
 require_once('front/myaccount_invoice_tab.php');
 require_once('front/view_invoice.php');
-require_once('wp360_plugin_update.php');
+require_once('wp360_update.php');
 
-
+// add_action('wp_head',function(){
+//     echo "this is new code for push testing 4th time Version 4";
+// });
 // register_activation_hook( __FILE__, 'wooRequiredNotice' );
 // function wooRequiredNotice() {
 //     if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) and current_user_can( 'activate_plugins' ) ) :
@@ -58,7 +60,7 @@ function wp360_admin_notice_notice(){
     if( get_transient( 'wp360-admin-notice-error' ) ){
         ?>
         <div class="notice notice-error is-dismissible">
-            <p><?php esc_attr_e( 'wp360 Invoice plugin requires Woocommerce plugin to be install and active.', 'wp360-invoice' ); ?></p>
+            <p><?php esc_attr_e( 'wp360 Invoice plugin requires Woocommerce plugin to be install and active 1. removecomment ', 'wp360-invoice' ); ?></p>
         </div>
         <?php
         delete_transient( 'wp360-admin-notice-error' );
@@ -88,6 +90,13 @@ function wp360invoice_pluginAdminScripts() {
     wp_enqueue_style(WP360_SLUG.'_suite_style', plugin_dir_url(__FILE__).'suite/suite.css', array(), WP360_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(WP360_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js', array('jquery'), WP360_VERSION,true);  
+    $plugin_basename = dirname(plugin_basename(__FILE__)); 
+    $localization_data = array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'wp360_plugin_slug' =>$plugin_basename, // Add more data as needed
+    );
+    wp_localize_script(WP360_SLUG.'_admin_js', 'wp360_admin_data', $localization_data);
+
 }
 
 

@@ -19,7 +19,7 @@ $thankyoumsg              = get_option('wp360_thankyoumsg', '');
 $wp360_invoicestartnumber = get_option('wp360_invoicestartnumber', '');
 ?>
 <div class="wrap wp360-invoice-settings">
-    <h1 class="wp-heading-inline"><?php esc_html_e('wp360 Option', 'wp360-invoice');?></h1>
+    <h1 class="wp-heading-inline"><?php esc_html_e('wp360 Invoice', 'wp360-invoice');?></h1>
     <div class="_CISettingIn">
         <form action="#" method="post" autocomplete="off">
             <?php wp_nonce_field('save-company-address-nonce', '_wpnonce_save_company_address'); ?>
