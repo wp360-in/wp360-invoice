@@ -4,28 +4,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 require_once('custom_plugin_update_count.php');
 
-add_action('wp_head', function(){
-    $aviliable_version = get_option('wp360_plugin_available_version');
-    echo '<pre> Aviliable Version',var_dump( $aviliable_version ); echo '</pre>';
-    echo '<pre> Current Version',var_dump(  get_plugin_version()  ); echo '</pre>';
-   // remove_custom_transient();
-    echo $plugin_slug   = basename(dirname(__FILE__));
+// add_action('wp_head', function(){
+//     $aviliable_version = get_option('wp360_plugin_available_version');
+//     echo '<pre> Aviliable Version',var_dump( $aviliable_version ); echo '</pre>';
+//     echo '<pre> Current Version',var_dump(  get_plugin_version()  ); echo '</pre>';
+//    // remove_custom_transient();
+//     echo $plugin_slug   = basename(dirname(__FILE__));
     
-  //  $license_file_path = plugin_dir_path( __FILE__ ) . 'token.txt';
-    $token = file_get_contents( $license_file_path );
-    $token           = trim( $token );
+//   //  $license_file_path = plugin_dir_path( __FILE__ ) . 'token.txt';
+//     $token = file_get_contents( $license_file_path );
+//     $token           = trim( $token );
 
-   // echo plugin_basename(__FILE__);
-    echo  $token;
-    echo "****";
-    //die();
-});
-
+//    // echo plugin_basename(__FILE__);
+//     echo  $token;
+//     echo "****";
+//     //die();
+// });
 
 add_action('admin_init', function() {
-
-
-
     // Your code to check for plugin updates and perform actions
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
     $client = new GuzzleHttp\Client();
@@ -40,12 +36,6 @@ add_action('admin_init', function() {
     } catch (Exception $e) {
         error_log('WP360 Invoice Error ' .$e->getMessage());
     }
-
-
-  //  echo "release_version" .$release_version.'<br>';
-    //error_log('Release Version: ' . $release_version);
-   // error_log('Current Version: ' . get_plugin_version());
-
     if (!empty($release_version) && version_compare(get_plugin_version(), $release_version, '<')) {
         error_log('Greater than current version');
         update_option('wp360_plugin_available_version', $release_version);
@@ -53,16 +43,8 @@ add_action('admin_init', function() {
    
 });
 
-
-
 add_action('after_plugin_row', 'custom_plugin_update_notice', 10, 2);
 function custom_plugin_update_notice($plugin_file, $plugin_data) {
-
-
-
-//echo '<pre>',var_dump( $plugin_file ); echo '</pre>';
-//echo '<pre>',var_dump( $plugin_data ); echo '</pre>';
-
 
     if ($plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
         $aviliable_version = get_option('wp360_plugin_available_version');
@@ -90,10 +72,6 @@ function custom_plugin_update_notice($plugin_file, $plugin_data) {
         }
     }
 }
-
-
-
-
 
 add_action('wp_ajax_update_wp360_invoice', 'update_wp360_invoice_callback');
 function update_wp360_invoice_callback() {
