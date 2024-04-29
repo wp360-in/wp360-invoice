@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
-require_once('custom_plugin_update_count.php');
+//require_once('custom_plugin_update_count.php');
 
 // add_action('wp_head', function(){
 //     $aviliable_version = get_option('wp360_plugin_available_version');
