@@ -21,8 +21,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 //     //die();
 // });
 
+function getreleaseDate(){
+    $releaseData = array();
+    require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
+    $client = new GuzzleHttp\Client();
+    try {
+        $repoOwner      = 'wp360-in';
+        $repoName       = 'wp360-invoice';
+        $response       = $client->request('GET', "https://api.github.com/repos/{$repoOwner}/{$repoName}/releases/latest");
+        $releaseData    = json_decode($response->getBody(), true);
+        
+    } catch (Exception $e) {
+        error_log('WP360 Invoice Error ' .$e->getMessage());
+    }
+    return $releaseData;
+}   
+
+// add_action('wp_head',function(){
+//     $plugin_data = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
+//     $releaseData = getreleaseDate();
+//   //  echo '<pre>',var_dump($releaseData); echo '</pre>';
+   
+//    //  $version            =  $releaseData['tag_name'];
+//    //  $author             =  $plugin_data['author'];
+//    //  $created_at         =  $releaseData['created_at'];
+//    //  $Compatible_upto    =  "6.4.4";
+
+    
+  
+
+//    //  echo '<pre>',var_dump($plugin_data['author']); echo '</pre>';
+//     // Version: 5.3.2
+//     // Author: Automattic - Anti-spam Team
+//     // Last Updated: 1 month ago
+//     // Requires WordPress Version: 5.8 or higher
+//     // Compatible up to: 6.4.4
+//     // Requires PHP Version: 5.6.20 or higher
+
+// });
+
+
+
 add_action('admin_init', function() {
-    // Your code to check for plugin updates and perform actions
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
     $client = new GuzzleHttp\Client();
     try {
@@ -33,6 +73,7 @@ add_action('admin_init', function() {
         if (isset($releaseData['tag_name'])) {
             $release_version = $releaseData['tag_name'];
         }
+
     } catch (Exception $e) {
         error_log('WP360 Invoice Error ' .$e->getMessage());
     }
@@ -47,10 +88,11 @@ add_action('after_plugin_row', 'custom_plugin_update_notice', 10, 2);
 function custom_plugin_update_notice($plugin_file, $plugin_data) {
 
     if ($plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
+        echo "true";
         $aviliable_version = get_option('wp360_plugin_available_version');
         if (get_plugin_version() !=  $aviliable_version) {
             ?>
-            <tr class="plugin-update-tr active wp360_alert_message" id="">
+            <tr class="plugin-update-tr active wp360_alert_message" id="" data-title="Wp360 Invoice">
                 <td class="plugin-update colspanchange" colspan="4">
                     <div class="update-message inline notice notice-warning notice-alt"> 
                         <p>
@@ -144,13 +186,15 @@ function fetchFilesFromDirectory($client, $apiUrl, $localDirectory, $token) {
 // }
 add_filter( 'site_transient_update_plugins', 'wp360_push_update' );
 function wp360_push_update( $transient ){
+
     if ( empty( $transient->checked ) ) {
         return $transient;
     }
-    $plugin_basename = plugin_basename(__FILE__); // Get the plugin's basename
+    $plugin_basename    = plugin_basename(__FILE__); // Get the plugin's basename
     $custom_plugin_file = dirname($plugin_basename) . '/wp360-invoice.php'; // Combine with '/wp360-invoice.php'
-    $available_version = get_option('wp360_plugin_available_version');
-    $installed_version = get_plugin_data(WP_PLUGIN_DIR . '/' . $custom_plugin_file)['Version'];
+    $available_version  = get_option('wp360_plugin_available_version');
+    $installed_version  = get_plugin_data(WP_PLUGIN_DIR . '/' . $custom_plugin_file)['Version'];
+
     if (!empty($available_version) && version_compare($available_version, $installed_version, '>')) {
         $res = new stdClass();
         $res->slug = dirname($plugin_basename); // Extract the directory name as the slug
@@ -171,46 +215,61 @@ add_filter( 'plugins_api', 'wp360_plugin_info', 20, 3);
 
 function wp360_plugin_info( $res, $action, $args ){
     // do nothing if this is not about getting plugin information
-    // if( 'plugin_information' !== $action ) {
-    //  return $res;
-    // }
-    // do nothing if it is not our plugin
-    // if( plugin_basename( __DIR__ ) !== $args->slug ) {
-    //  return $res;
-    // }
-    // info.json is the file with the actual plugin information on your server
-    // $remote = wp_remote_get( 
-    //  'https://rudrastyh.com/wp-content/uploads/updater/info.json', 
-    //  array(
-    //      'timeout' => 10,
-    //      'headers' => array(
-    //          'Accept' => 'application/json'
-    //      ) 
-    //  )
-    // );
-    // do nothing if we don't get the correct response from the server
-    // if( 
-    //  is_wp_error( $remote )
-    //  || 200 !== wp_remote_retrieve_response_code( $remote )
-    //  || empty( wp_remote_retrieve_body( $remote ) 
-    // ) {
-    //  return $res;    
-    // }
-    //$remote = json_decode( wp_remote_retrieve_body( $remote ) );
+    if( 'plugin_information' !== $action ) {
+        return $res;
+    }
+    if( plugin_basename( __DIR__ ) !== $args->slug ) {
+            return $res;
+    }
+    $plugin_data        = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
+    $releaseData        = getreleaseDate();
+    // echo '<pre>',var_dump($releaseData); echo '</pre>';
+    $name               =  $plugin_data['Name'];
+    $textDomain         =  $plugin_data['TextDomain'];
+    $author             =  $plugin_data['Author'];
+    $testedupto         =  $plugin_data['WC tested up to'];
+    $requiresWP         =  $plugin_data['RequiresWP'];
+    $requiresatleast_Php   =  $plugin_data['RequiresPHP'];
+    $releaseVersion      =  $releaseData['tag_name'];
+    $created_at          =  $releaseData['created_at'];
+    $tarball_url         =  $releaseData['tarball_url'];
+    $zipball_url         =  $releaseData['zipball_url'];
+    $bodymessage         =  $releaseData['body'];
+    $created_date = new DateTime($created_at);
+    $current_date = new DateTime();
+    $interval = $current_date->diff($created_date);
+    $lastupdateddate = '';
+    if ($interval->y > 0) {
+        $lastupdateddate = $interval->y . ' year' . ($interval->y > 1 ? 's' : '') . ' ago';
+    } elseif ($interval->m > 0) {
+        $lastupdateddate = $interval->m . ' month' . ($interval->m > 1 ? 's' : '') . ' ago';
+    } elseif ($interval->d > 0) {
+        $lastupdateddate = $interval->d . ' day' . ($interval->d > 1 ? 's' : '') . ' ago';
+    } elseif ($interval->h > 0) {
+        $lastupdateddate = $interval->h . ' hr' . ($interval->h > 1 ? 's' : '') . ' ago';
+    } elseif ($interval->i > 0) {
+        $lastupdateddate = $interval->i . ' min' . ($interval->i > 1 ? 's' : '') . ' ago';
+    } else {
+        $lastupdateddate = 'Just now';
+    }
+
+
+
     $res = new stdClass();
-    $res->name = 'wp360-invoice';
-    $res->slug = 'wp360-invoice';
-    $res->author = 'test';
+    $res->name   = $name;
+    $res->slug   = $textDomain;
+    $res->author = $author;
     $res->author_profile = 'author_profile';
-    $res->version = '1.1.5';
-    $res->tested = '2.222';
-    $res->requires = '9.3';
-    $res->requires_php = '8.2';
-    $res->download_link = 'google.com';
-    $res->trunk = 'google.com';
-    $res->last_updated = '9.2';
+    $res->version       = $releaseVersion;
+    $res->tested        =  $testedupto;
+    $res->requires      = $requiresWP;
+    $res->requires_php  = $requiresatleast_Php;
+    $res->download_link = $tarball_url;
+    $res->trunk         = $zipball_url;
+    $res->last_updated = $lastupdateddate;
+
     $res->sections = array(
-        'description' => 'test desc',
+        'description' => $bodymessage,
         'installation' => 'asdasd instal',
         'changelog' => 'change log'
         // you can add your custom sections (tabs) here
@@ -225,5 +284,4 @@ function wp360_plugin_info( $res, $action, $args ){
     );
     
     return $res;
-
 }
