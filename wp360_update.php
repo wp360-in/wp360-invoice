@@ -4,6 +4,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 require_once('custom_plugin_update_count.php');
 
+
+
 add_action('wp_head', function(){
     $aviliable_version = get_option('wp360_plugin_available_version');
     echo '<pre> Aviliable Version',var_dump( $aviliable_version ); echo '</pre>';
@@ -26,8 +28,8 @@ add_action('admin_init', function() {
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
     $client = new GuzzleHttp\Client();
     try {
-        $repoOwner      = 'KrishnaBtist';
-        $repoName       = 'wp360-invoice-btist';
+        $repoOwner      = 'ankitbtits';
+        $repoName       = 'wp360-invoice';
         $response       = $client->request('GET', "https://api.github.com/repos/{$repoOwner}/{$repoName}/releases/latest");
         $releaseData    = json_decode($response->getBody(), true);
         if (isset($releaseData['tag_name'])) {
@@ -88,8 +90,8 @@ function update_wp360_invoice_callback() {
         $aviliable_version = get_option('wp360_plugin_available_version');
         $plugin_dir     = plugin_dir_path(__FILE__);
         require_once $plugin_dir . 'vendor/autoload.php';
-        $repoOwner      = 'KrishnaBtist';
-        $repoName       = 'wp360-invoice-btist';
+        $repoOwner      = 'ankitbtits';
+        $repoName       = 'wp360-invoice';
         $branch         = 'main'; 
         $license_file_path = plugin_dir_path( __FILE__ ) . 'license.txt';
         $token = file_get_contents( $license_file_path );
