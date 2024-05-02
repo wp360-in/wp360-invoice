@@ -2,68 +2,15 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
-//require_once('custom_plugin_update_count.php');
-
-add_action('wp_head', function(){
-    $aviliable_version = get_option('wp360_plugin_available_version');
-    echo '<pre> Aviliable Version',var_dump( $aviliable_version ); echo '</pre>';
-    echo '<pre> Current Version',var_dump(  get_plugin_version()  ); echo '</pre>';
-   // remove_custom_transient();
-    echo $plugin_slug   = basename(dirname(__FILE__));
-    
-  //  $license_file_path = plugin_dir_path( __FILE__ ) . 'token.txt';
-    $token = file_get_contents( $license_file_path );
-    $token           = trim( $token );
-
-   // echo plugin_basename(__FILE__);
-    echo  $token;
-    echo "****";
-    //die();
-    $releaseData = getreleaseDate();
-    echo '<pre>',var_dump($releaseData); echo '</pre>';
-});
-
-
-
-
-function getreleaseDate(){
-
-    $releaseData = array();
-    // $releaseData = array();
-    // require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
-    // $client = new GuzzleHttp\Client();
-    // try {
-    //     $repoOwner      = 'wp360-in';
-    //     $repoName       = 'wp360-invoice';
-    //     $response       = $client->request('GET', "https://api.github.com/repos/{$repoOwner}/{$repoName}/releases/latest");
-    //     $releaseData    = json_decode($response->getBody(), true);
-        
-    // } catch (Exception $e) {
-    //     echo "ERROR API HIT ISSUES";
-    //     error_log('WP360 Invoice Error ' .$e->getMessage());
-    // }
-    // return $releaseData;
-    if(isset( $_SESSION['wp360_release_data'] )){
-        $releaseData  = $_SESSION['wp360_release_data'];
-        $release_version = $releaseData['tag_name'];
+session_start();
+add_action('wp_head', 'get_release_date');
+function get_release_date() {
+    if(isset($_SESSION['wp360_release_data'])){
+        $data = $_SESSION['wp360_release_data'];
+        return $data;
     }
-    return $releaseData;
-}   
-
-
-add_action('wp_head',function(){
-    $plugin_data = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
-    $releaseData = getreleaseDate();
-
-    echo '<pre>', var_dump( $releaseData ); echo '</pre>';
-});
-
+}
 add_action('admin_init', function() {
-
-    if (!session_id()) {
-        session_start();
-    }
-
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
     // $client = new GuzzleHttp\Client();
     // try {
@@ -77,7 +24,6 @@ add_action('admin_init', function() {
     // } catch (Exception $e) {
     //     error_log('WP360 Invoice Error ' .$e->getMessage());
     // }
-
     if (!isset($_SESSION['wp360_release_data'])) {
         $client = new GuzzleHttp\Client();
         try {
@@ -90,30 +36,20 @@ add_action('admin_init', function() {
             error_log('WP360 Invoice Error ' .$e->getMessage());
         }
     } else {
-        // Retrieve release data from session
-        $releaseData = $_SESSION['wp360_release_data'];
+        $responseGit        = $_SESSION['wp360_release_data'];
+        $release_version    = $responseGit['tag_name'];
     }
-
-
-    if(isset( $_SESSION['wp360_release_data'] )){
-        $releaseData  = $_SESSION['wp360_release_data'];
-        $release_version = $releaseData['tag_name'];
-    }
-
+    //error_log(json_encode($release_version));
     if (!empty($release_version) && version_compare(get_plugin_version(), $release_version, '<')) {
         error_log('Greater than current version');
         update_option('wp360_plugin_available_version', $release_version);
     }
-
-   // die();
   
 });
 
 add_action('after_plugin_row', 'custom_plugin_update_notice', 10, 2);
 function custom_plugin_update_notice($plugin_file, $plugin_data) {
-
     if ($plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
-        echo "true";
         $aviliable_version = get_option('wp360_plugin_available_version');
         if (get_plugin_version() !=  $aviliable_version) {
             ?>
@@ -156,19 +92,13 @@ function update_wp360_invoice_callback() {
         $clonePath      = plugin_dir_path(__FILE__);
         // Initialize GuzzleHttp client
         $client = new GuzzleHttp\Client();
-
-
-
         fetchFilesFromDirectory($client, $apiUrl, $clonePath, $token);
-       
         echo json_encode(
             array(
                 'success' => true,
                 'aviliableVersion'=>$aviliable_version
             ),
         );
-
-       //  delete_site_transient('update_plugins');
     }
 }
 
@@ -227,7 +157,14 @@ function wp360_push_update( $transient ){
     }
     return $transient;
 }
+
+
+
+
+
+
 //view details modal
+
 add_filter( 'plugins_api', 'wp360_plugin_info', 20, 3);
 function wp360_plugin_info( $res, $action, $args ){
     if( 'plugin_information' !== $action ) {
@@ -237,7 +174,7 @@ function wp360_plugin_info( $res, $action, $args ){
             return $res;
     }
     $plugin_data        = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
-    $releaseData        = getreleaseDate();
+    $releaseData        =  get_release_date();
     $name               =  $plugin_data['Name'];
     $textDomain         =  $plugin_data['TextDomain'];
     $author             =  $plugin_data['Author'];
