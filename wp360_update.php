@@ -268,6 +268,15 @@ function wp360_plugin_info( $res, $action, $args ){
     $res->trunk         = $zipball_url;
     $res->last_updated = $lastupdateddate;
 
+
+
+    $htmlChangelog = '<div>
+        <h5>'.$releaseVersion.'</h5>
+        <ul>
+            <li>'.$bodymessage.'</li>
+        </ul>
+        <a href="">'._e('See changelog for all versions.','wp360-invoice').'</a>
+    </div>';
     $res->sections = array(
         'description' => $bodymessage,
         'installation' => 'asdasd instal',
