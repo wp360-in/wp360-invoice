@@ -48,13 +48,11 @@ add_action('admin_init', function() {
 
 add_action('after_plugin_row', 'custom_plugin_update_notice', 10, 2);
 function custom_plugin_update_notice($plugin_file, $plugin_data) {
-
-  //  echo '<pre>', var_dump( $plugin_data ); echo '</pre>';
-    if ( isset( $plugin_data['plugin'] ) && $plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
+    if (  isset( $plugin_data['plugin'] ) && $plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
         $aviliable_version = get_option('wp360_plugin_available_version');
         if (get_plugin_version() !=  $aviliable_version) {
             ?>
-            <tr class="plugin-update-tr active wp360_alert_message" id="" data-title="Wp360 Invoice">
+            <tr class="plugin-update-tr active wp360_alert_message wp360_success_update" id="" data-title="Wp360 Invoice">
                 <td class="plugin-update colspanchange" colspan="4">
                     <div class="update-message inline notice notice-warning notice-alt"> 
                         <p>
@@ -94,12 +92,13 @@ function update_wp360_invoice_callback() {
         // Initialize GuzzleHttp client
         $client = new GuzzleHttp\Client();
         fetchFilesFromDirectory($client, $apiUrl, $clonePath, $token);
-        echo json_encode(
-            array(
-                'success' => true,
-                'aviliableVersion'=>$aviliable_version
-            ),
+        $result = array(
+            'success' => true,
+            'aviliableVersion'=>$aviliable_version,
+            'message' => 'Plugin updated successfully!'
         );
+        return wp_send_json_success($result);
+        wp_die();
     }
 }
 

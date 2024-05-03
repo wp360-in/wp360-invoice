@@ -74,26 +74,26 @@ jQuery(document).on('click','.wp360-invoice-update-click',function(e){
       type: 'POST',
       data: data,
       beforeSend: function() {
-        jQuery('.update-message').append('<span class="updating-message">Updating...</span>');
+        $this.closest('.update-message').append('<span class="updating-message">Updating...</span>');
+        $this.closest('.update-message').addClass('updating-message');
       },
       success: function(response) {
-          let responseData = JSON.parse(response);
-
-          console.log(JSON.stringify(responseData))
+           $this.closest('.update-message').removeClass('updating-message');
+          let responseData = response.data;
+          //console.log(JSON.stringify(responseData))
           var trElement    = jQuery('tr[data-slug="wp360-invoice"]');
           var divElement   = trElement.find('.plugin-version-author-uri');
           divElement.html('Version ' + responseData.aviliableVersion + ' | By <a href="https://wp360.in/">wp360</a>');
-
-          jQuery('.updating-message').remove();
-          jQuery('.plugin-update-tr').remove();
-          //CUSTOM COUNT
-          var pluginCountElement = jQuery('.plugin-count');
-          console.log(JSON.stringify(pluginCountElement));
+           $this.parent().find('.update-message').remove();
+           var pluginCountElement = jQuery('.plugin-count');
+         //  console.log(JSON.stringify(pluginCountElement));
           if (pluginCountElement.length) {
               var currentCount = parseInt(pluginCountElement.html());
               var newCount = currentCount - 1;
               pluginCountElement.text(newCount);
           }
+          var updatemesageHtml = '<div class="update-message notice inline notice-alt updated-message notice-success"><p aria-label="wp360">'+responseData.message+'</p></div>';
+          jQuery(".wp360_success_update .plugin-update").html(updatemesageHtml);
       },
       error: function(xhr, status, error) {
           console.error(error);
