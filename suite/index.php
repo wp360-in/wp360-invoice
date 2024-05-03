@@ -43,13 +43,13 @@ if (!class_exists('Wp360_Suite')) {
 
             $wp360_plugins = [
                 [
-                    'title' => 'WP360 Stripe',
+                    'title' => 'WP360 Stripe new update',
                     'description' => 'A tailored plugin for WooCommerce, facilitating seamless integration with the Stripe payment gateway. Enhance your online transactions with a secure and efficient payment experience.',
                     'url' => '#',
                     'status'=>'inactive',
                 ],
                 [
-                    'title' => 'WP360 Tickets',
+                    'title' => 'WP360 Tickets update 1',
                     'description' => 'Elevate your event management with WP360 Tickets, a customized WooCommerce plugin designed for seamless ticketing solutions, making your events a breeze to organize and attend.',
                     'url' => '#',
                     'status'=>'inactive',

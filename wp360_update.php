@@ -39,7 +39,6 @@ add_action('admin_init', function() {
         $responseGit        = $_SESSION['wp360_release_data'];
         $release_version    = $responseGit['tag_name'];
     }
-    //error_log(json_encode($release_version));
     if (!empty($release_version) && version_compare(get_plugin_version(), $release_version, '<')) {
         error_log('Greater than current version');
         update_option('wp360_plugin_available_version', $release_version);
@@ -49,6 +48,8 @@ add_action('admin_init', function() {
 
 add_action('after_plugin_row', 'custom_plugin_update_notice', 10, 2);
 function custom_plugin_update_notice($plugin_file, $plugin_data) {
+
+  //  echo '<pre>', var_dump( $plugin_data ); echo '</pre>';
     if ($plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
         $aviliable_version = get_option('wp360_plugin_available_version');
         if (get_plugin_version() !=  $aviliable_version) {

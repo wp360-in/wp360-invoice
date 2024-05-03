@@ -7,7 +7,7 @@
   Tested up to: 6.5.6
   Author: wp360
   Author URI: https://wp360.in/
-  Version: 0.0.1
+  Version: 1.0.0
   Text Domain: wp360-invoice
  */
 
@@ -32,24 +32,14 @@ require_once('front/myaccount_invoice_tab.php');
 require_once('front/view_invoice.php');
 require_once('wp360_update.php');
 
-
-// add_action('wp_head',function(){
-//     echo "this is new code for push testing 4th time Version 4";
-// });
-// register_activation_hook( __FILE__, 'wooRequiredNotice' );
-// function wooRequiredNotice() {
-//     if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) and current_user_can( 'activate_plugins' ) ) :
-//         deactivate_plugins(plugin_basename(__FILE__));
-
-//     endif;
-// }
-// add_action( 'admin_notices', 'wooRequiredNotice' );
-
-
 register_activation_hook( __FILE__, 'wp360_admin_notice_activation_hook' );
 function wp360_admin_notice_activation_hook() {
   
 }
+
+add_action('wp_head',function(){
+    echo "this is for clone testing";
+});
 
 add_action( 'admin_notices', 'wp360_admin_notice_notice' );
 function wp360_admin_notice_notice(){
