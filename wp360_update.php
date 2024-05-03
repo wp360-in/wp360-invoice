@@ -50,7 +50,7 @@ add_action('after_plugin_row', 'custom_plugin_update_notice', 10, 2);
 function custom_plugin_update_notice($plugin_file, $plugin_data) {
 
   //  echo '<pre>', var_dump( $plugin_data ); echo '</pre>';
-    if ($plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
+    if ( isset( $plugin_data['plugin'] ) && $plugin_data['plugin'] === $plugin_file &&  $plugin_data['Name'] == "Wp360 Invoice") {
         $aviliable_version = get_option('wp360_plugin_available_version');
         if (get_plugin_version() !=  $aviliable_version) {
             ?>
