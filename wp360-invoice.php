@@ -36,11 +36,6 @@ register_activation_hook( __FILE__, 'wp360_admin_notice_activation_hook' );
 function wp360_admin_notice_activation_hook() {
   
 }
-
-add_action('wp_head',function(){
-    echo "this is for clone testing 2";
-});
-
 add_action( 'admin_notices', 'wp360_admin_notice_notice' );
 function wp360_admin_notice_notice(){
     if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) and current_user_can( 'activate_plugins' ) ) {
@@ -63,9 +58,6 @@ function wp360_remove_activation_message() {
     }
 }
 
-
-
-
 add_action( 'wp_enqueue_scripts', 'wp360invoice_pluginFrontScripts');
 function wp360invoice_pluginFrontScripts(){    
     if (is_account_page()) {
@@ -73,7 +65,6 @@ function wp360invoice_pluginFrontScripts(){
         wp_enqueue_script(WP360_SLUG.'_front_jspdf', plugin_dir_url(__FILE__).'front/assets/js/front-jspdf.js',array('jquery'),WP360_VERSION,true);
     }
 }
-
 
 add_action('admin_enqueue_scripts', 'wp360invoice_pluginAdminScripts');
 function wp360invoice_pluginAdminScripts() {    
