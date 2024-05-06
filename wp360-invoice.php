@@ -7,7 +7,7 @@
   Tested up to: 6.5.6
   Author: wp360
   Author URI: https://wp360.in/
-  Version: 0.0.1
+  Version: 1.0.0
   Text Domain: wp360-invoice
  */
 
@@ -36,6 +36,11 @@ register_activation_hook( __FILE__, 'wp360_admin_notice_activation_hook' );
 function wp360_admin_notice_activation_hook() {
   
 }
+
+add_action('wp_head',function(){
+    echo "testing clone";
+});
+
 add_action( 'admin_notices', 'wp360_admin_notice_notice' );
 function wp360_admin_notice_notice(){
     if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) and current_user_can( 'activate_plugins' ) ) {
