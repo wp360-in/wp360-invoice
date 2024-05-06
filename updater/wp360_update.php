@@ -22,6 +22,7 @@ function wp360invoice_UpdateScripts() {
     );
     wp_localize_script(WP360_SLUG.'_update_js', 'wp360_admin_data', $localization_data);
 }
+
 add_action('admin_init', function() {
     require_once plugin_dir_path(__DIR__) . '/vendor/autoload.php';
     if (!isset($_SESSION['wp360_release_data'])) {
@@ -76,9 +77,10 @@ function custom_plugin_update_notice($plugin_file, $plugin_data) {
 add_action('wp_ajax_update_wp360_invoice', 'update_wp360_invoice_callback');
 function update_wp360_invoice_callback() {
     if(isset($_POST['action']) &&  $_POST['action'] == "update_wp360_invoice"){
-        $aviliable_version = get_option('wp360_plugin_available_version');
-        $plugin_dir     = plugin_dir_path(__FILE__);
-        require_once $plugin_dir . 'vendor/autoload.php';
+       
+        $aviliable_version   = get_option('wp360_plugin_available_version');
+       // $plugin_dir          = plugin_dir_path(__DIR__);
+        require_once plugin_dir_path(__DIR__) . '/vendor/autoload.php';
         $repoOwner      = 'wp360-in';
         $repoName       = 'wp360-invoice';
         $branch         = 'main'; 
@@ -87,7 +89,7 @@ function update_wp360_invoice_callback() {
         $token                  = '';
        // $token                  = trim( $token );
         $apiUrl         = "https://api.github.com/repos/{$repoOwner}/{$repoName}/contents";
-        $clonePath      = plugin_dir_path(__FILE__);
+        $clonePath       = plugin_dir_path(__DIR__);
         // Initialize GuzzleHttp client
         $client = new GuzzleHttp\Client();
         fetchFilesFromDirectory($client, $apiUrl, $clonePath, $token);
