@@ -38,7 +38,7 @@ function wp360_admin_notice_activation_hook() {
 }
 
 add_action('wp_head',function(){
-    echo "testing clone";
+    echo "testing clone 22";
 });
 
 add_action( 'admin_notices', 'wp360_admin_notice_notice' );
