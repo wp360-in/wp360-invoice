@@ -1,10 +1,10 @@
 let pluginSlugname = wp360_admin_data.wp360_plugin_slug;
-console.log("pluginSlugname" + pluginSlugname);
+//console.log("pluginSlugname" + pluginSlugname);
 jQuery('tr[data-slug="'+pluginSlugname+'"] .update-message').hide();
 var viewHrefVersion = jQuery("#"+pluginSlugname+"-update a").attr("href");
 jQuery(".wp360-invoice-view-details").attr('href' , viewHrefVersion)
 
-console.log("Check Update file " + viewHrefVersion);
+//console.log("Check Update file " + viewHrefVersion);
 jQuery(document).on('click','.wp360-invoice-update-click',function(e){
   e.preventDefault();
   $this =  jQuery(this);

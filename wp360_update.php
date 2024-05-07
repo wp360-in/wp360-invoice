@@ -6,8 +6,8 @@ session_start();
 
 add_action('admin_enqueue_scripts', 'wp360invoice_UpdateScripts');
 function wp360invoice_UpdateScripts() {    
-    wp_enqueue_script(WP360_SLUG.'_update_js', plugin_dir_url(__FILE__).'/js/wp360_update_script.js?v='.time().'', array('jquery'), WP360_VERSION,true);
-    $plugin_basename   = dirname(plugin_basename(__DIR__)); 
+    wp_enqueue_script(WP360_SLUG.'_update_js', plugin_dir_url(__FILE__).'admin/js/wp360_update_script.js?v='.time().'', array('jquery'), WP360_VERSION,true);
+    $plugin_basename = dirname(plugin_basename(__FILE__)); 
     $localization_data = array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'wp360_plugin_slug' =>$plugin_basename, // Add more data as needed
