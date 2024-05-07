@@ -25,18 +25,6 @@ function get_release_date() {
 }
 add_action('admin_init', function() {
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
-    // $client = new GuzzleHttp\Client();
-    // try {
-    //     $repoOwner      = 'wp360-in';
-    //     $repoName       = 'wp360-invoice';
-    //     $response       = $client->request('GET', "https://api.github.com/repos/{$repoOwner}/{$repoName}/releases/latest");
-    //     $releaseData    = json_decode($response->getBody(), true);
-    //     // if (isset($releaseData['tag_name'])) {
-    //     //     $release_version = $releaseData['tag_name'];
-    //     // }
-    // } catch (Exception $e) {
-    //     error_log('WP360 Invoice Error ' .$e->getMessage());
-    // }
     if (!isset($_SESSION['wp360_release_data'])) {
         $client = new GuzzleHttp\Client();
         try {
@@ -129,10 +117,10 @@ function fetchFilesFromDirectory($client, $apiUrl, $localDirectory, $token) {
             $localFilePath = $localDirectory . '/' . $file['name'];
             if (file_exists($localFilePath)) {
                 file_put_contents($localFilePath, $fileContent);
-                error_log(' File '.$file['name'].' updated locally 1. <br>');
+                //error_log(' File '.$file['name'].' updated locally 1. <br>');
             } else {
                 file_put_contents($localFilePath, $fileContent);
-                error_log('File '.$file['name'].' saved locally 1 <br>');
+               // error_log('File '.$file['name'].' saved locally 1 <br>');
             }
         } elseif ($file['type'] === 'dir') {
             $subDirectoryUrl = $file['url'];
@@ -170,14 +158,7 @@ function wp360_push_update( $transient ){
     }
     return $transient;
 }
-
-
-
-
-
-
 //view details modal
-
 add_filter( 'plugins_api', 'wp360_plugin_info', 20, 3);
 function wp360_plugin_info( $res, $action, $args ){
     if( 'plugin_information' !== $action ) {
@@ -186,21 +167,21 @@ function wp360_plugin_info( $res, $action, $args ){
     if( plugin_basename( __DIR__ ) !== $args->slug ) {
             return $res;
     }
-    $plugin_data        = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
-    $releaseData        =  get_release_date();
-    $name               =  $plugin_data['Name'];
-    $textDomain         =  $plugin_data['TextDomain'];
-    $author             =  $plugin_data['Author'];
-    $testedupto         =  $plugin_data['WC tested up to'];
-    $requiresWP         =  $plugin_data['RequiresWP'];
-    $requiresatleast_Php   =  $plugin_data['RequiresPHP'];
+    $plugin_data         = get_plugin_data(plugin_dir_path(__FILE__) . 'wp360-invoice.php');
+    $releaseData         =  get_release_date();
+    $name                =  $plugin_data['Name'];
+    $textDomain          =  $plugin_data['TextDomain'];
+    $author              =  $plugin_data['Author'];
+    $testedupto          =  $plugin_data['WC tested up to'];
+    $requiresWP          =  $plugin_data['RequiresWP'];
+    $requiresatleast_Php =  $plugin_data['RequiresPHP'];
     $releaseVersion      =  $releaseData['tag_name'];
     $created_at          =  $releaseData['created_at'];
     $tarball_url         =  $releaseData['tarball_url'];
     $zipball_url         =  $releaseData['zipball_url'];
     $bodymessage         =  $releaseData['body'];
-    $created_date = new DateTime($created_at);
-    $current_date = new DateTime();
+    $created_date        = new DateTime($created_at);
+    $current_date        = new DateTime();
     $interval = $current_date->diff($created_date);
     $lastupdateddate = '';
     if ($interval->y > 0) {
