@@ -9,7 +9,7 @@ jQuery(document).on('click','.wp360-invoice-update-click',function(e){
   e.preventDefault();
   $this =  jQuery(this);
   var data = {
-      'action': 'update_wp360_invoice' // Action to handle in PHP
+      'action': 'wp360_update_plugin' // Action to handle in PHP
   };
   jQuery.ajax({
       url: wp360_admin_data.ajax_url, // WordPress AJAX URL

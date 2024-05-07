@@ -78,7 +78,7 @@ function custom_plugin_update_notice($plugin_file, $plugin_data) {
 
 add_action('wp_ajax_update_wp360_invoice', 'update_wp360_invoice_callback');
 function update_wp360_invoice_callback() {
-    if(isset($_POST['action']) &&  $_POST['action'] == "update_wp360_invoice"){
+    if(isset($_POST['action']) &&  $_POST['action'] == "wp360_update_plugin"){
         $aviliable_version = get_option('wp360_plugin_available_version');
         $plugin_dir     = plugin_dir_path(__FILE__);
         require_once $plugin_dir . 'vendor/autoload.php';
