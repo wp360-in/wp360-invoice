@@ -33,10 +33,6 @@ require_once('front/view_invoice.php');
 require_once('wp360_update.php');
 
 
-add_action('wp_head', function(){
-    echo "clone testing";
-});
-
 register_activation_hook( __FILE__, 'wp360_admin_notice_activation_hook' );
 function wp360_admin_notice_activation_hook() {
   
@@ -51,7 +47,7 @@ function wp360_admin_notice_notice(){
     if( get_transient( 'wp360-admin-notice-error' ) ){
         ?>
         <div class="notice notice-error is-dismissible">
-            <p><?php esc_attr_e( 'wp360 Invoice plugin requires Woocommerce plugin to be install and active 1. removecomment ', 'wp360-invoice' ); ?></p>
+            <p><?php esc_attr_e( 'wp360 Invoice plugin requires Woocommerce plugin to be install.', 'wp360-invoice' ); ?></p>
         </div>
         <?php
         delete_transient( 'wp360-admin-notice-error' );
@@ -77,14 +73,6 @@ function wp360invoice_pluginAdminScripts() {
     wp_enqueue_style(WP360_SLUG.'_suite_style', plugin_dir_url(__FILE__).'suite/suite.css', array(), WP360_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(WP360_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'), WP360_VERSION,true); 
-
-    // $plugin_basename = dirname(plugin_basename(__FILE__)); 
-    // $localization_data = array(
-    //     'ajax_url' => admin_url('admin-ajax.php'),
-    //     'wp360_plugin_slug' =>$plugin_basename, // Add more data as needed
-    // );
-    // wp_localize_script(WP360_SLUG.'_admin_js', 'wp360_admin_data', $localization_data);
-
 }
 
 
