@@ -238,3 +238,11 @@ function wp360_plugin_info( $res, $action, $args ){
     unset($res->download_link);
     return $res;
 }
+
+add_action('admin_footer',function(){
+echo '<style>
+.plugin_install_from_iframe[data-slug="wp360-invoice"]{
+    display: none!important;
+}
+</style>';
+});
