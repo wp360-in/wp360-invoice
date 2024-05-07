@@ -7,7 +7,7 @@
   Tested up to: 6.5.6
   Author: wp360
   Author URI: https://wp360.in/
-  Version: 0.0.1
+  Version: 1.0.0
   Text Domain: wp360-invoice
  */
 
@@ -38,7 +38,7 @@ function wp360_admin_notice_activation_hook() {
 }
 
 add_action('wp_head',function(){
-    echo "testing clone 22";
+    echo "testing clone 22-22";
 });
 
 add_action( 'admin_notices', 'wp360_admin_notice_notice' );
