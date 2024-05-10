@@ -7,7 +7,12 @@ if (!class_exists('Wp360_Suite')) {
         public function __construct() {
             // Hook to add the admin menu
             add_action('admin_menu', array($this, 'add_admin_menu'));
+            add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts_and_styles'));
         }
+        public function enqueue_scripts_and_styles() {    
+            wp_enqueue_style('wp360_suite_style', plugin_dir_url(__FILE__).'css/suite.css', array(), '');
+        }
+
         public function add_admin_menu() {
             // Add the top-level menu item
             add_menu_page(
@@ -16,6 +21,7 @@ if (!class_exists('Wp360_Suite')) {
                 'manage_options',  // Capability required to access the menu
                 'wp360_menu',      // Menu slug
                 array($this, 'wp360_page'), // Callback function to display the page
+                //'wp360-invoice/suite/dashboard.php',
                 'dashicons-admin-generic', // Dashicon for the menu
                 20                 // Position in the menu
             );           
@@ -37,49 +43,8 @@ if (!class_exists('Wp360_Suite')) {
                 'manage_options',
                 'wp360-invoice/admin/wp360_settings.php',
             );
-
         }
         public function wp360_page() {
-
-            $wp360_plugins = [
-                [
-                    'title' => 'WP360 Stripe',
-                    'description' => 'A tailored plugin for WooCommerce, facilitating seamless integration with the Stripe payment gateway. Enhance your online transactions with a secure and efficient payment experience.',
-                    'url' => '#',
-                    'status'=>'inactive',
-                ],
-                [
-                    'title' => 'WP360 Tickets',
-                    'description' => 'Elevate your event management with WP360 Tickets, a customized WooCommerce plugin designed for seamless ticketing solutions, making your events a breeze to organize and attend.',
-                    'url' => '#',
-                    'status'=>'inactive',
-                ],
-                [
-                    'title' => 'WP360 OptiPixel',
-                    'description' => 'OptiPixel is a powerful image optimization plugin designed to enhance website performance by compressing and optimizing ',
-                    'url' => '#',
-                    'status'=>'inactive',
-                ],
-                [
-                    'title' => 'WP360 Subscription',
-                    'description' => 'Empower your subscription-based business model with WP360 Subscription, a WooCommerce plugin crafted for managing recurring payments and providing a hassle-free subscription experience. ',
-                    'url' => '#',
-                    'status'=>'inactive',
-                ],
-                [
-                    'title' => 'WP360 Direct Pay Link',
-                    'description' => 'Simplify payments with WP360 Direct Pay Link, a WooCommerce plugin that creates direct payment links, offering a quick and secure way for customers to complete transactions without navigating through multiple pages',
-                    'url' => '#',
-                    'status'=>'inactive',
-                ],
-                [
-                    'title' => 'wp360 invoice',
-                    'description' => 'The WP360 Invoice Plugin provides an intuitive solution to manage and create invoices seamlessly for woocommerce websites. ',
-                    'url' => '#',
-                    'status'=>'active',
-                ],
-                // Add more plugins as needed
-            ];
             echo '<div class="wp360_main_dashboard">
                 <div class="wp360_banner">
                      <div class="wp360_logo">
@@ -88,34 +53,103 @@ if (!class_exists('Wp360_Suite')) {
                 </div>
                 <div class="wp360_content">
                     <div class="head">
-                        <h2>'.esc_html__('Welcome to wp360', 'wp360-invoice').'</h2>
-                        <p><strong>'.esc_html__('Upcoming Plugin','wp360-invoice' ).'</strong></p>
+                        <h2>'.esc_html__('What else do we have for you?', 'wp360-invoice').'</h2>
                     </div>
                     <div class="list">';
-
-                    foreach ($wp360_plugins as $wp360_plugin) {
-                        echo '<div class="inner_list ' . esc_html($wp360_plugin['status']) . '">';
-                        echo '<div class="icons"><span></span></div>';
-                        echo '<div class="wrapitem">';
-                        echo '<div class="content">';
-                        echo '<h3>' . esc_html($wp360_plugin['title']) . '</h3>';
-                        echo '<p>' . esc_html($wp360_plugin['description']) . '</p>';
-                        echo '</div>';
-                        echo '<div class="link">';
-                        
-                        // Only display "coming soon" link if the status is not 'active'
-                        if ($wp360_plugin['status'] !== 'active') {
-                            echo '<a href="' . esc_url($wp360_plugin['url']) . '">' . esc_html__('coming soon', 'wp360-invoice') . '</a>';
+                    foreach ($this->addons() as $addon) {
+                        $status = 'not_installed';
+                        $actionName = 'Get it';
+                        $action = '';
+                        if(isset($addon['repo_url'])){
+                            $action = $addon['repo_url'];
                         }
                         
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
+
+                        $target = '';
+                        $pathpluginurl = WP_PLUGIN_DIR .'/'. $addon['path'];
+                        $isinstalled = file_exists( $pathpluginurl );
+                        if ($isinstalled ) {
+                            $status = 'installed';
+                            $actionName = 'Activate';
+                            $action = '#activateplugin';
+                        }
+                        if (is_plugin_active($addon['path'])) {
+                            $status = 'activated';
+                            $actionName = 'Activated';
+                            $action = 'javascript:;';
+                        } 
+                        if(isset($addon['repo_url']) && !$addon['repo_url']){
+                            $status = 'coming_up';
+                            $actionName = 'Comming up';
+                            $action = 'javascript:;';
+                        }
+                        echo '
+                        <div class="inner_list ' . esc_html($status) . '">
+                            <div class="icons"><img src="'.plugins_url('/', __FILE__).'images/'.$addon['icon'].'"/></div>
+                            <div class="wrapitem">
+                                <div class="content">
+                                    <h3>' . esc_html($addon['title']). '</h3>
+                                    <p>' . esc_html($addon['description']) . '</p>
+                                </div>
+                                <div class="link">
+                                <a href="' . $action . '" class="' . esc_html($status) . '" '.(($actionName == 'Get it'?'target="_blank"':'')).'>' . $actionName . '</a>
+                                </div>
+                            </div>
+                        </div>';
                     }
 
                     echo '</div>
                 </div>  
             <div>';
+        }
+
+        public function addons(){
+            $addons = [
+                [
+                    'title' => 'WP360 Invoice',
+                    'description' => 'The addon provides an intuitive solution to manage and create invoices seamlessly for woocommerce websites.',
+                    'repo_url' => 'https://github.com/wp360-in/wp360-invoice/',
+                    'path'=>'wp360-invoice/wp360-invoice.php',
+                    'icon'=>'wp360-invoice-icon.png'
+                ],
+                [
+                    'title' => 'WP360 Stripe',
+                    'description' => 'A tailored plugin for WooCommerce, facilitating seamless integration with the Stripe payment gateway. Enhance your online transactions with a secure and efficient payment experience.',
+                    'repo_url' => 'https://github.com/wp360-in/wp360-stripe/',
+                    'path'=>'wp360-stripe/wp360-stripe.php',
+                    'icon'=>'wp360-stripe-icon.png'
+                ],
+                [
+                    'title' => 'WP360 Optipixel',
+                    'description' => 'A tailored plugin for WooCommerce, facilitating seamless integration with the Stripe payment gateway. Enhance your online transactions with a secure and efficient payment experience.',
+                    'repo_url' => 'https://github.com/wp360-in/wp360-optipixel/',
+                    'path'=>'wp360-optipixel/wp360-optipixel.php',
+                    'icon'=>'wp360-invoice-icon.png'
+                ],
+                [
+                    'title' => 'WP360 Subscription',
+                    'description' => 'The addon provides an intuitive solution to manage and create invoices seamlessly for woocommerce websites.',
+                    'repo_url' => 'https://github.com/wp360-in/wp360-subscription/',
+                    'path'=>'wp360-subscription/wp360-subscription.php',
+                    'icon'=>'wp360-subscription-icon.png'
+                ],
+                [
+                    'title' => 'WP360 Paypal',
+                    'description' => 'A tailored plugin for WooCommerce, facilitating seamless integration with the Stripe payment gateway. Enhance your online transactions with a secure and efficient payment experience.',
+                    //'repo_url' => 'https://github.com/wp360-in/wp360-paypal/',
+                    'path'=>'wp360-paypal/wp360-paypal.php',
+                    'icon'=>'wp360-paypal-icon.png'
+                ],
+                [
+                    'title' => 'WP360 Tickets',
+                    'description' => 'A tailored plugin for WooCommerce, facilitating seamless integration with the Stripe payment gateway. Enhance your online transactions with a secure and efficient payment experience.',
+                    //'repo_url' => 'https://github.com/wp360-in/wp360-stripe/',
+                    'path'=>'wp360-optipixel/wp360-optipixel.php',
+                    'icon'=>'wp360-ticket-icon.png'
+                ],
+                // Add more plugins as needed
+            ];
+            return $addons;
         }
     }
     // Instantiate the class

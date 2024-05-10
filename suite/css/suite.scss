@@ -1,0 +1,92 @@
+
+$color:#007cba;
+.wp360_main_dashboard{
+    .wp360_banner{
+        background-color: #fff;
+        padding: 24px 20px 12px 45px;
+        margin-left: -20px;
+        padding-right: 20px;
+        .wp360_logo{
+            img{
+                max-width: 90px;
+            }
+        }
+    }
+    .wp360_content{
+        width: calc(100% - 90px);
+        margin: 0 0 0 20px;
+        box-sizing: border-box;
+        *{
+            box-sizing: border-box;
+        }
+        .head{
+            h2{
+                color: $color;
+                font-size: 35px;
+                font-weight: normal;
+                margin: 60px 0 60px 20px;
+            }
+        }
+        .list{
+            width: 100%;            
+            background: #fff;
+            padding: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .inner_list{
+            width: calc(33% - 60px);
+            display: flex;
+            margin: 30px 0;
+             .wrapitem{
+                width: calc(100% - 50px);
+                display: flex;
+                flex-wrap: wrap;
+                .link{
+                    margin-top: auto;
+                    a{
+                        background-color: $color;
+                        color: #FDFDFD;
+                        font-size: 14px;
+                        padding: 10px 15px;                       
+                        text-decoration: none;
+                        border-radius: 2px;
+                        display: inline-block;    
+                        min-width: 110px;
+                        text-align: center;
+                        &.activated{
+                            background-color: transparent;
+                            color: $color;
+                            padding: 0;
+                            text-align: left;
+                        }
+                        &.coming_up{
+                            background-color: #d0cece;
+                        }
+                        &.installed{
+                            background: #fff;
+                            color: $color;
+                            border: solid 1px $color;
+                        }
+                    }
+                }
+             }
+            .content{
+                margin-bottom: 20px;
+                h3{
+                    font-weight: normal;
+                    color: $color;
+                    font-size: 20px;
+                    text-transform: uppercase;
+                    margin-top: 0;
+                }
+            }
+            .icons{
+                position: relative;
+                width: 50px;
+                margin-right: 20px;
+            }
+        }
+    }
+}
