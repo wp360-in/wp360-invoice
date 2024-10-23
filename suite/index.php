@@ -6,21 +6,21 @@ if (!class_exists('Wp360_Suite')) {
     class Wp360_Suite {
         public function __construct() {
             // Hook to add the admin menu
-            add_action('admin_menu', array($this, 'add_admin_menu'));
-            add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts_and_styles'));
+            add_action('admin_menu', array($this, 'wp360invoice_add_admin_menu'));
+            add_action('admin_enqueue_scripts', array($this, 'wp360invoice_enqueue_scripts_and_styles'));
         }
-        public function enqueue_scripts_and_styles() {    
-            wp_enqueue_style('wp360_suite_style', plugin_dir_url(__FILE__).'css/suite.css', array(), '');
+        public function wp360invoice_enqueue_scripts_and_styles() {    
+            wp_enqueue_style('wp360_suite_style', plugin_dir_url(__FILE__) . 'css/suite.css', array(), '1.0.0');
         }
 
-        public function add_admin_menu() {
+        public function wp360invoice_add_admin_menu() {
             // Add the top-level menu item
             add_menu_page(
                 'Wp360',           // Page title
                 'Wp360',           // Menu title
                 'manage_options',  // Capability required to access the menu
                 'wp360_menu',      // Menu slug
-                array($this, 'wp360_page'), // Callback function to display the page
+                array($this, 'wp360invoice_dashboard_page'), // Callback function to display the page
                 //'wp360-invoice/suite/dashboard.php',
                 'dashicons-admin-generic', // Dashicon for the menu
                 20                 // Position in the menu
@@ -32,19 +32,11 @@ if (!class_exists('Wp360_Suite')) {
                 __('wp360 invoice', 'wp360-invoice'),
                 __('wp360 invoice', 'wp360-invoice'),
                 'manage_options',
-                'wp360-invoice/admin/all_invoices.php',
-                ''
-            );
-               // Add submenu page
-            add_submenu_page(
-                'wp360_menu',
-                __('Settings', 'wp360-invoice'),
-                __('Settings', 'wp360-invoice'),
-                'manage_options',
-                'wp360-invoice/admin/wp360_settings.php',
+                'wp360_invoice',
+                array($this, 'wp360invoice_render_page'),
             );
         }
-        public function wp360_page() {
+        public function wp360invoice_dashboard_page() {
             echo '<div class="wp360_main_dashboard">
                 <div class="wp360_banner">
                      <div class="wp360_logo">
@@ -56,7 +48,7 @@ if (!class_exists('Wp360_Suite')) {
                         <h2>'.esc_html__('What else do we have for you?', 'wp360-invoice').'</h2>
                     </div>
                     <div class="list">';
-                    foreach ($this->addons() as $addon) {
+                    foreach ($this->wp360invoice_addons() as $addon) {
                         $status = 'not_installed';
                         $actionName = 'Get it';
                         $action = '';
@@ -78,21 +70,21 @@ if (!class_exists('Wp360_Suite')) {
                             $actionName = 'Activated';
                             $action = 'javascript:;';
                         } 
-                        if(isset($addon['repo_url']) && !$addon['repo_url']){
+                        if(!isset($addon['repo_url']) || !$addon['repo_url']){
                             $status = 'coming_up';
                             $actionName = 'Comming up';
                             $action = 'javascript:;';
                         }
                         echo '
                         <div class="inner_list ' . esc_html($status) . '">
-                            <div class="icons"><img src="'.plugins_url('/', __FILE__).'images/'.$addon['icon'].'"/></div>
+                            <div class="icons"><img src="'.esc_url(plugins_url('/', __FILE__)).'images/'.esc_html($addon['icon']).'"/></div>
                             <div class="wrapitem">
                                 <div class="content">
                                     <h3>' . esc_html($addon['title']). '</h3>
                                     <p>' . esc_html($addon['description']) . '</p>
                                 </div>
                                 <div class="link">
-                                <a href="' . $action . '" class="' . esc_html($status) . '" '.(($actionName == 'Get it'?'target="_blank"':'')).'>' . $actionName . '</a>
+                                <a href="' .esc_url($action) . '" class="' . esc_html($status) . '" '.((esc_html($actionName) == 'Get it'?'target="_blank"':'')).'>' . esc_html($actionName) . '</a>
                                 </div>
                             </div>
                         </div>';
@@ -103,7 +95,7 @@ if (!class_exists('Wp360_Suite')) {
             <div>';
         }
 
-        public function addons(){
+        public function wp360invoice_addons(){
             $addons = [
                 [
                     'title' => 'WP360 Invoice',
@@ -150,6 +142,14 @@ if (!class_exists('Wp360_Suite')) {
                 // Add more plugins as needed
             ];
             return $addons;
+        }
+        public function wp360invoice_render_page(){
+            if(isset($_GET['tab']) && $_GET['tab'] === 'settings'){
+                require_once esc_url(plugin_dir_path(__FILE__)).'../admin/wp360_invoice_settings.php';
+            }
+            else{
+                require_once esc_url(plugin_dir_path(__FILE__)).'../admin/all_invoices.php';
+            }            
         }
     }
     // Instantiate the class

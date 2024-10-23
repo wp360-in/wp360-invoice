@@ -17,7 +17,7 @@ function wp360invoice_newInvoiceID(){
         } 
     } else {
         $wp360_invoicestartnumber = get_option('wp360_invoicestartnumber', '');
-        if($wp360_invoicestartnumber){
+        if (!empty($wp360_invoicestartnumber)) {
             return wp360invoice_increment_invoice_number($wp360_invoicestartnumber);
         }else{
             return 'WP360A95';
@@ -49,7 +49,7 @@ function wp360invoice_wooCustomersList() {
    $customer_query = new WP_User_Query(
        array(
           'fields' => 'ID',
-          'role__not_in' => array('administrator'), // Exclude 'administrator' and 'customer' roles
+          //'role__not_in' => array('administrator'), // Exclude 'administrator' and 'customer' roles
        )
     );
     return $customer_query->get_results();

@@ -161,7 +161,7 @@ function wp360invoice_showInvoice($invoiceID){
             <h2><?php esc_html_e('Invoice', 'wp360-invoice');?></h2>
             <div class="invoiceHead">
                 <div class="invoceCompanyInfo">
-                        <!-- <@?php
+                        <?php
                             if ( has_custom_logo() ) :
                                 $custom_logo_id = get_theme_mod( 'custom_logo' );
                                 $image = wp_get_attachment_image_src( $custom_logo_id , 'full' );
@@ -169,26 +169,9 @@ function wp360invoice_showInvoice($invoiceID){
                             endif
                         ?>
                     <small>
-                        <@?php 
+                        <?php 
                             $tagLine = get_bloginfo('description');
                             echo esc_html( sanitize_text_field ($tagLine ));
-                        ?>
-                    </small> -->
-                    <?php
-                        $firm = get_post_meta($invoiceID, 'invoice_firm', true);
-                        if(!empty($firm['text_logo'])){
-                            echo '<h4>'.$firm['text_logo'].'</h4>';
-                        }
-                        elseif(!empty($firm['logo_url'])){
-                            echo '<img src="'.esc_url($firm['logo_url']).'" alt="logo">';
-                        }
-                        ?>
-                    <small>
-						<!-- Digital Consultant and Software Developer -->
-                        <?php //echo '<pre>', print_r($firm), '</pre>';
-                            if(!empty($firm['tagline'])){
-                                echo $firm['tagline'];
-                            }
                         ?>
                     </small>
                 </div>
@@ -208,7 +191,7 @@ function wp360invoice_showInvoice($invoiceID){
                             echo '<p class="pre_line">'.wp_kses_post($saved_company_address).'</p>';
                         }
                      ?>                    
-                    <!-- <p>
+                    <p>
                         <?php
                             if(!empty($companyPhone)){
                                 echo '<b>'.esc_html__( 'Phone :','wp360-invoice' ).'</b>'.esc_html($companyPhone).'<br>';
@@ -217,7 +200,7 @@ function wp360invoice_showInvoice($invoiceID){
                                 echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($companyEmail);
                             }
                         ?>
-                    </p> -->
+                    </p>
                 </div>
                 <div class="receiptInfo">
                     <h4><?php esc_html_e('Bill To', 'wp360-invoice');?></h4>
@@ -230,8 +213,8 @@ function wp360invoice_showInvoice($invoiceID){
                             if(!empty($custPhone)){
                                 echo '<b>'.esc_html__( 'Phone :','wp360-invoice' ).'</b>'.esc_html($custPhone).'<br>';
                             }
-                            if(!empty($companyEmail)){
-                                echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($companyEmail).'<br>';
+                            if(!empty($custEmail)){
+                                echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($custEmail).'<br>';
                             }
                         ?>
                         <?php
