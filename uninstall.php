@@ -14,9 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
-delete_option('wp360_company_address');
 delete_option('wp360_thankyoumsg');
 delete_option('wp360_invoicestartnumber');
+delete_option('wp360_invoice_addresses');
+delete_option('wp360_invoice_banking');
 
 $wp360_posts = get_posts(
 	[
@@ -33,4 +34,10 @@ if ( $wp360_posts ) {
 		wp_delete_post( $wp360_post, true );
 	}
 }
-
+// Delete extra fields
+$users = get_users();    
+if($users){
+	foreach ($users as $user) {
+		delete_user_meta($user->ID, 'wp360_invoice_user_extra_fields');
+	}
+}

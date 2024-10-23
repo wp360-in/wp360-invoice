@@ -2,12 +2,12 @@
 // jQuery('tr[data-slug="'+pluginSlugname+'"] .update-message').hide();
 // var viewHrefVersion = jQuery("#"+pluginSlugname+"-update a").attr("href");
 // jQuery(".wp360-invoice-view-details").attr('href' , viewHrefVersion)
-// function wp360toggleCustomFun(elm){
-//     jQuery(elm).toggle()
-// }
+function wp360toggleCustomFun(elm){
+    jQuery(elm).toggle()
+}
 jQuery(document).ready(function($) {
 var currentIndex = 0;
-function wp360_invoice_addNewItem() {
+function wp360invoice_addNewItem() {
   currentIndex++; // Increment the item index
   var newItem = $('.wp360_invoiceItem:first').clone(); // Clone the first invoiceItem
   newItem.find('input').val('');
@@ -17,7 +17,7 @@ function wp360_invoice_addNewItem() {
   newItem.insertBefore('.wp360_invoice_addInvoiceItemCon');
   $('.wp360_invoice_removeInvoiceItem').toggle(currentIndex > 0);
 }
-function wp360_invoice_removeLastItem() {
+function wp360invoice_removeLastItem() {
   if (currentIndex > 0) {
     $('.wp360_invoiceItem:last').remove();
     currentIndex--;
@@ -25,10 +25,10 @@ function wp360_invoice_removeLastItem() {
   }
 }
 $('.wp360_invoice_addItem').on('click', function() {
-    wp360_invoice_addNewItem();
+    wp360invoice_addNewItem();
 });
 $('.wp360_invoice_removeInvoiceItem').on('click', function() {
-    wp360_invoice_removeLastItem();
+    wp360invoice_removeLastItem();
 });
 $(document).on('change keydown keyup', '.wp360_invoice_itemsCon input', function(){
   let qty = 0;
@@ -49,3 +49,118 @@ $(document).on('change keydown keyup', '.wp360_invoice_itemsCon input', function
 }); 
 
 
+jQuery(document).ready(function($) {
+  // Function to handle dynamic addition and removal of fields
+  function setupDynamicFields(tableSelector, addButtonSelector, removeButtonSelector) {
+      // Add field
+      $(tableSelector).on('click', addButtonSelector, function() {
+          let $template = $(this).parents('fieldset').find('.dynamic-field-template').first().clone();
+          $template.removeClass('dynamic-field-template');
+          $template.addClass('is_removable_field');
+          $template.find('textarea').val('');
+          $template.show();
+          console.log($(this));
+          $(this).parent('div').before($template);
+
+          var button = $('#wp360-firm-details-fields').find('.upload-logo-button').last();
+          var inputField = button.prev('.logo-url-field');
+          var previewImg = button.next('.logo-preview');
+          handleMediaUploader(button, inputField, previewImg);
+      });
+
+      // Remove field
+      $(tableSelector).on('click', removeButtonSelector, function() {
+          $(this).closest('.is_removable_field').remove();
+      });
+  }
+  // Setup for Invoice Addresses
+  setupDynamicFields('#wp360_invoice-settings-form', '.add-dynamic-field', '.remove-dynamic-field');
+
+  // User Profile Extra Fields
+  const fieldTemplate = `
+      <div class="wp360-invoice-field">
+          <input type="text" name="wp360_invoice_field_names[]" placeholder="Field Name" />
+          <input type="text" name="wp360_invoice_field_values[]" placeholder="Value" />
+          <button type="button" class="remove-field">Remove</button>
+      </div>
+  `;
+
+    // Add field button click handler
+    $('#wp360_invoice_user_extra_add').on('click', function() {
+        $('#wp360_invoice_extra_fields #wp360-invoice-fields-container').append(fieldTemplate);
+    });
+
+    // Remove field button click handler
+    $('#wp360_invoice_extra_fields #wp360-invoice-fields-container').on('click', '.remove-field', function() {
+        $(this).closest('.wp360-invoice-field').remove();
+    });
+
+    function handleMediaUploader(button, inputField, previewImg) {
+      var mediaUploader;
+      button.click(function(e){
+          e.preventDefault();
+          if (mediaUploader) {
+              mediaUploader.open();
+              return;
+          }
+          mediaUploader = wp.media.frames.file_frame = wp.media({
+              title: 'Choose Logo',
+              button: {
+                  text: 'Choose Logo'
+              },
+              multiple: false
+          });
+          mediaUploader.on('select', function(){
+              var attachment = mediaUploader.state().get('selection').first().toJSON();
+              inputField.val(attachment.url);
+              previewImg.attr('src', attachment.url).show();
+          });
+          mediaUploader.open();
+      });
+    }
+
+    // Toggle between Firm Name and Logo based on radio selection
+    function toggleFirmDetails(fieldset) {
+        var firmType = fieldset.find('input.toggle-input-type:checked').val();
+        var firmNameField = fieldset.find('.firm-name-field');
+        var firmLogoField = fieldset.find('.firm-logo-field');
+
+        if (firmType === 'name') {
+            firmNameField.show();
+            firmLogoField.hide();
+            firmLogoField.find('.logo-url-field').val('');
+            firmLogoField.find('.logo-preview').hide();
+        } else {
+            firmNameField.hide();
+            firmNameField.find('input').val('');
+            firmLogoField.show();
+        }
+    }
+
+    // Initial toggle for all existing firm rows
+    $('.firm-details-row').each(function() {
+        var row = $(this);
+        toggleFirmDetails(row);
+        handleMediaUploader(row.find('.upload-logo-button'), row.find('.logo-url-field'), row.find('.logo-preview'));
+    });
+
+    // Toggle inputs on radio button change
+    $(document).on('change', '.toggle-input-type', function() {
+        var row = $(this).closest('.firm-details-row');
+        toggleFirmDetails(row);
+    });
+    var selectElement = document.getElementById('wp360_invoice_firm');
+    selectElement.addEventListener('focus', updateFirmDetails);
+    selectElement.addEventListener('change', updateFirmDetails);
+    
+    function updateFirmDetails() {
+        var selectedOption = this.options[this.selectedIndex];
+        // Update the values of the relevant fields based on the selected option's data attributes
+        document.getElementById('firm_logo').value = selectedOption.getAttribute('data-logo') || '';
+        document.getElementById('firm_tagline').value = selectedOption.getAttribute('data-tagline') || '';
+        document.getElementById('firm_text_logo').value = selectedOption.getAttribute('data-text-logo') || '';
+        document.getElementById('firm_id').value = selectedOption.getAttribute('data-firm-id') || '';
+    }
+    
+
+});

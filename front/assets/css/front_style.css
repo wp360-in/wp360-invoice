@@ -6,9 +6,11 @@
   background-color: #fff;
   color: #000;
   margin: 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   padding: 50px 60px 60px;
   color: #525252;
+  margin: auto;
 }
 .wp360InvoiceCon h2, .wp360InvoiceCon h4, .wp360InvoiceCon th, .wp360InvoiceCon strong {
   color: #000;
@@ -18,17 +20,26 @@
   font-size: 26px;
   text-transform: uppercase;
   font-weight: 500;
-  margin: 0 0 35px;
+  margin: 0 0 50px;
 }
 .wp360InvoiceCon p {
   font-size: 14px !important;
+  margin-top: 0;
 }
 .wp360InvoiceCon .invoiceHead {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.wp360InvoiceCon .invoiceHead .invoceCompanyInfo h4 {
+  margin: 0px;
+  font-size: 16px;
 }
 .wp360InvoiceCon .invoiceHead .invoceCompanyInfo img {
-  width: 80px;
+  width: 120px;
 }
 .wp360InvoiceCon .invoiceHead .invoceCompanyInfo small {
   font-size: 13px;
@@ -41,8 +52,12 @@
   line-height: 25px;
 }
 .wp360InvoiceCon .invoceHead2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   font-size: 14px;
   line-height: 25px;
   margin-top: 25px;
@@ -57,6 +72,7 @@
 }
 .wp360InvoiceCon .invoceHead2 .receiptInfo {
   min-width: 170px;
+  max-width: 250px;
 }
 .wp360InvoiceCon .invoSummCon {
   width: 100%;
@@ -89,21 +105,50 @@
 }
 .wp360InvoiceCon .invoiceFooter {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
 }
 .wp360InvoiceCon .invoiceFooter .textCon {
   padding: 10px 5px 10px 0;
 }
+.wp360InvoiceCon .invoiceFooter .bankDetail {
+  border: solid 1px #e4eaee;
+  width: 100%;
+  font-size: 14px;
+}
+.wp360InvoiceCon .invoiceFooter .bankDetail div {
+  padding: 20px;
+}
+.wp360InvoiceCon .invoiceFooter .bankDetail h3 {
+  background-color: #e4eaee;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 0;
+  padding: 12px 20px;
+  color: #000;
+}
 .wp360InvoiceCon .invoiceFooter .infoTotalCon {
   width: 100%;
-  max-width: 210px;
+  max-width: 280px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  padding-left: 40px;
+  margin-left: auto;
 }
 .wp360InvoiceCon .invoiceFooter .infoTotalCon div {
   width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   text-align: center;
   font-size: 16px;
@@ -116,6 +161,19 @@
   border-top: solid 2px #000;
   padding: 10px;
 }
+.wp360InvoiceCon .invoiceFooter2 {
+  width: 100%;
+  font-size: 14px;
+  margin: 50px 0;
+}
+.wp360InvoiceCon .invoiceFooter2 h4 {
+  margin: 0;
+  padding: 0;
+}
+.wp360InvoiceCon .invoiceFooter2 div {
+  width: 100%;
+  text-align: center;
+}
 
 .summaryTable {
   margin: 0;
@@ -123,8 +181,12 @@
   list-style: none;
 }
 .summaryTable li {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   padding-bottom: 5px;
   margin-bottom: 5px;
   border-bottom: solid 1px #e4eaee;
@@ -140,15 +202,165 @@
   vertical-align: top !important;
 }
 
-#wp360-invoice_printinvoice {
-  background: #004c6d;
-  max-width: fit-content;
-  padding: 10px 25px;
-  cursor: pointer;
-  color: #fff;
-  margin-bottom: 14px;
+.wp360Invoice_action_buttons_wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px 15px;
+}
+
+.wp360Invoice_action_buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px 12px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #d2d2d2;
   font-size: 16px;
-  border-radius: 0;
+}
+.wp360Invoice_action_buttons #wp360-invoice_printinvoice, .wp360Invoice_action_buttons .wp360_invoice_status_update, .wp360Invoice_action_buttons .view_receipt {
+  background: #fff;
+  border: 1px solid #0c173b;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  padding: 4px 12px;
+  cursor: pointer;
+  color: #0c173b;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.wp360Invoice_action_buttons .wp360_invoice_status_update, .wp360Invoice_action_buttons .view_receipt {
+  background: #e4eaee;
+  border: 1px solid #e4eaee;
+  text-decoration: none !important;
+}
+.wp360Invoice_action_buttons .wp360_invoice_status {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+}
+.wp360Invoice_action_buttons .wp360_invoice_status.paid i {
+  background-color: #22a753;
+}
+.wp360Invoice_action_buttons .wp360_invoice_status.paid i:before {
+  content: "\f147";
+}
+.wp360Invoice_action_buttons .wp360_invoice_status i {
+  background-color: #c32525;
+  height: 1.625rem;
+  width: 1.625rem;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.25rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 50%;
+}
+.wp360Invoice_action_buttons .wp360_invoice_status i:before {
+  font-family: "Dashicons";
+  font-style: normal;
+  content: "\f158";
+}
+
+#receiptPopup {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  padding: 20px;
+  z-index: 1000;
+}
+#receiptPopup .modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  max-width: 32em;
+}
+#receiptPopup form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 15px;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+#receiptPopup form label {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 600;
+}
+#receiptPopup form input[type=file] {
+  margin: 10px 0px 20px;
+}
+#receiptPopup button {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 12px 20px;
+  border: none;
+}
+#receiptPopup button:not(.siteBtn) {
+  background: #e8e8e8;
+  color: #000;
+}
+
+.siteBtn {
+  background-color: #0c173b;
+  border-radius: 6px;
+  color: #FFF;
+  -webkit-transition: ease background-color 0.3s, ease filter 0.3s, ease transform 0.3s;
+  transition: ease background-color 0.3s, ease filter 0.3s, ease transform 0.3s;
+  border: none;
+}
+.siteBtn:hover {
+  background-color: #2a3d75;
 }
 
 @media print {
@@ -156,17 +368,20 @@
     padding: 0 !important;
   }
   * {
-    color-adjust: exact;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
     -webkit-appearance: initial;
     -webkit-appearance: caret;
   }
-  .grecaptcha-badge, .cky-consent-container {
+  .grecaptcha-badge,
+  .cky-consent-container,
+  .switch,
+  #secondary {
     display: none !important;
   }
   .woocommerce-MyAccount-content {
     background: #fff !important;
+    background-color: #fff !important;
     width: 100% !important;
     padding: 60px 30px 15px 30px;
   }
@@ -186,4 +401,7 @@
   .wp-block-post-title, .post-title {
     display: none !important;
   }
+}
+.pre_line {
+  white-space: pre-line;
 }/*# sourceMappingURL=front_style.css.map */
