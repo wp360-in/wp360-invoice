@@ -162,5 +162,46 @@ jQuery(document).ready(function($) {
         document.getElementById('firm_id').value = selectedOption.getAttribute('data-firm-id') || '';
     }
     
+    $(".admin-wp360invoice_download").on("click", function(e) {        
+        e.preventDefault();
+        var inv_id = $(e.target).data('invoice-id');
+        $.ajax({
+            url: wp360_pdf_ajax_admin.ajax_url,
+            method: 'POST',
+            data: {
+                action: 'generate_invoice_pdf',
+                nonce: wp360_pdf_ajax_admin.nonce,
+                invoice_data: inv_id
+            },
+            xhrFields: {
+                responseType: 'blob' // Ensures the response is treated as a file (binary)
+            },
+            success: function(response, status, xhr) {
+                var blob = new Blob([response], { type: 'application/pdf' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `invoice-${inv_id}.pdf`;
+                link.click(); // Programmatically trigger the download
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error generating PDF: ' + errorThrown);
+            }
+        });
+    });
+    $('td.invoice_receipt a').on('click', function(e) {
+        e.preventDefault();
+        var imageSrc = $(this).data('image');
+        $('#modalImage').attr('src', imageSrc);
+        $('#wp360_invoice_receipt_modal').fadeIn();
+    });
 
+    $('#wp360_invoice_receipt_modal .close').on('click', function() {
+        $('#wp360_invoice_receipt_modal').fadeOut();
+    });
+
+    $(window).on('click', function(event) {
+        if ($(event.target).is('#wp360_invoice_receipt_modal')) {
+            $('#wp360_invoice_receipt_modal').fadeOut();
+        }
+    });
 });

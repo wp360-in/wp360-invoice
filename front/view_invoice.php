@@ -3,6 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
+
 function wp360invoice_view_invoice_endpoint() {
     add_rewrite_endpoint( 'view-invoice', EP_ROOT | EP_PAGES );
 }  
@@ -59,7 +60,6 @@ function handle_mark_invoice_as_paid() {
     }
 }
 add_action('admin_post_mark_invoice_as_paid', 'handle_mark_invoice_as_paid');
-
 
 function wp360invoice_showInvoice($invoiceID){
     $invoicePost = get_post($invoiceID);
@@ -118,10 +118,11 @@ function wp360invoice_showInvoice($invoiceID){
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
         }
-    ?>
+    ?> 
         <div class="wp360Invoice_action_buttons hidden-print">            
-            <div class="wp360Invoice_action_buttons_wrap">
-                <div id="wp360-invoice_printinvoice" data-id="<?php echo esc_html($invoiceID);?>"><?php esc_html_e('&#128438; Print Invoice', 'wp360-invoice')?></div>
+            <div class="wp360Invoice_action_buttons_wrap">                
+                <input type="hidden" name="wp360invoice_id" value="<?php echo sanitize_text_field(get_post_meta($invoiceID, 'invoice_number', true));?>">
+                <div id="wp360-invoice_printinvoice" data-id="<?php echo esc_html($invoiceID);?>"><?php esc_html_e('&#128462; Download PDF', 'wp360-invoice')?></div>
                 <?php
                     $status = get_post_meta($invoiceID, 'invoice_status', true);
                     $receipt = get_post_meta($invoiceID, 'payment_receipt', true);
@@ -130,7 +131,7 @@ function wp360invoice_showInvoice($invoiceID){
                     }
                     else{
                         if(!empty($receipt)) {
-                            echo '<a href="'.$receipt.'" target="_blank" class="view_receipt">'.__('View Receipt', 'text-domain').'</a>';
+                            echo '<a href="#" target="_blank" class="view_receipt" data-image="'.$receipt.'">'.__('View Receipt', 'text-domain').'</a>';
                         }
                     }
                 ?>
@@ -150,13 +151,12 @@ function wp360invoice_showInvoice($invoiceID){
                     <?php wp_nonce_field('wp360invoice_mark_invoice_paid', 'wp360invoice_mark_invoice_paid_nonce'); ?>
                     <label for="paymentReceipt"><?php _e('Upload Receipt (PDF or JPG):', 'text-domain'); ?></label>
                     <input type="file" id="paymentReceipt" name="paymentReceipt" accept=".pdf, .jpg, .jpeg" required>
-                    <input type="hidden" id="invoiceID" name="invoiceID" value="">
+                    <input type="hidden" id="invoiceID" name="invoiceID" value="<?php echo $invoiceID; ?>">
                     <button type="submit" class="siteBtn"><?php _e('Submit', 'text-domain'); ?></button>
                     <button type="button" class="closeReceiptModal""><?php _e('Cancel', 'text-domain'); ?></button>
                 </form>
             </div>
-        </div>
-        
+        </div>        
         <div class="wp360InvoiceCon">
             <h2><?php esc_html_e('Invoice', 'wp360-invoice');?></h2>
             <div class="invoiceHead">
@@ -318,8 +318,24 @@ function wp360invoice_showInvoice($invoiceID){
                 ?> 
             </div>
         </div>
-    <?php
+        <div style="display: none;">
+             
+        </div> 
+        <div id="wp360_invoice_receipt_modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img id="modalImage" src="" alt="Image" />
+            </div>
+        </div>
+    <?php       
     endif;
 }
 
-
+// Handle AJAX PDF generation
+// function wp360_generate_pdf_invoice() {
+//     // Check nonce for security
+//     check_ajax_referer('wp360_generate_pdf_nonce', 'nonce');
+//     require ABSPATH . 'wp-content/plugins/' . WP360_SLUG .'/wp360_invoice_pdf.php';
+// }
+// add_action('wp_ajax_generate_pdf_invoice', 'wp360_generate_pdf_invoice');
+// add_action('wp_ajax_nopriv_generate_pdf_invoice', 'wp360_generate_pdf_invoice');

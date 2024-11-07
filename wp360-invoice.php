@@ -64,6 +64,10 @@ function wp360invoice_pluginFrontScripts(){
     if (is_account_page()) {
         wp_enqueue_style(WP360_SLUG.'_front_style', plugin_dir_url(__FILE__).'front/assets/css/front_style.css','',WP360_VERSION);
         wp_enqueue_script(WP360_SLUG.'_front_jspdf', plugin_dir_url(__FILE__).'front/assets/js/front-jspdf.js',array('jquery'),WP360_VERSION,true);
+        wp_localize_script(WP360_SLUG.'_front_jspdf', 'wp360_pdf_ajax', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('wp360_generate_pdf_nonce'),
+        ));
     }
 }
 
@@ -74,6 +78,10 @@ function wp360invoice_pluginAdminScripts() {
     wp_enqueue_style(WP360_SLUG.'_suite_style', plugin_dir_url(__FILE__).'suite/suite.css', array(), WP360_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(WP360_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'), WP360_VERSION,true); 
+    wp_localize_script(WP360_SLUG.'_admin_js', 'wp360_pdf_ajax_admin', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('wp360_generate_pdf_nonce'),
+    ));
 }
 
 

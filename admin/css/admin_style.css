@@ -159,6 +159,13 @@
 .invoiceSettingsWrapper {
   margin-top: 1rem;
 }
+.invoiceSettingsWrapper .dflex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
 .invoiceSettingsWrapper .wp360_submit_wrapper {
   width: 100%;
 }
@@ -193,9 +200,43 @@
 .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields hr {
   margin-top: 20px;
   margin-bottom: 20px;
+  opacity: 0;
 }
-.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .toggle_firm_logo label:last-of-type {
-  margin-left: 20px;
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .dflex {
+  gap: 24px;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .dflex > div {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .dflex > div.toggle_firm_logo {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 200px;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .dflex .removeFieldWrapper {
+  -webkit-box-flex: 100%;
+      -ms-flex: 100%;
+          flex: 100%;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .is_removable_field:nth-of-type(odd) {
+  background: #F6F7F7;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .dynamic-field-template + div.is_removable_field {
+  padding-top: 1rem !important;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .removeFieldWrapper {
+  width: 100%;
+  text-align: right;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset#wp360-firm-details-fields .add_firm_new {
+  border-top: 1px solid #e3e6ef;
+  padding: 1rem;
 }
 .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset div, .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset h3, .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset textarea, .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset label, .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset input[type=text] {
   width: 100%;
@@ -232,6 +273,9 @@
 .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset > div {
   padding: 1rem;
   padding-top: 0px;
+}
+.invoiceSettingsWrapper #wp360_invoice-settings-form fieldset > .is_removable_field {
+  padding: 2rem 1rem;
 }
 .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset textarea, .invoiceSettingsWrapper #wp360_invoice-settings-form fieldset input[type=text] {
   border: 1px solid #c3c4c7;
@@ -274,6 +318,44 @@
 
 #adminmenu a[href="admin.php?page=wp360-invoice-settings"] {
   display: none;
+}
+
+#wp360_invoice_receipt_modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+#wp360_invoice_receipt_modal .modal-content {
+  background-color: #fefefe;
+  margin: clamp(50px, 5vw, 5vw) auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: calc(100% - 30px);
+  text-align: center;
+  max-width: 1500px;
+  position: relative;
+}
+#wp360_invoice_receipt_modal .close {
+  font-size: 28px;
+  font-weight: bold;
+  display: block;
+  aspect-ratio: 1/1;
+  background: #080808;
+  padding: 5px;
+  border-radius: 50%;
+  color: white;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  z-index: 5;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 @media (max-width: 767px) {

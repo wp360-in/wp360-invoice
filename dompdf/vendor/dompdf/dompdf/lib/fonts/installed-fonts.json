@@ -1,0 +1,25 @@
+{
+    "montserrat": {
+        "normal": "montserrat_normal_00833106404dc8458cdfb436c759f23d"
+    },
+    "work sans": {
+        "100_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_100_italic_1bbc25a79f6ac75bd742a455429f8f4d",
+        "200_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_200_italic_30f48eb630cbfac281486a3c71a1b160",
+        "300_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_300_italic_b538b249d31cf92078de70729b2eb976",
+        "italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_italic_09b3cc7ba1e73b7f4bab66c97cb495be",
+        "500_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_500_italic_bdeabf8058ce4bd1cd0263b644ede86a",
+        "600_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_600_italic_28e7f98ec7c5b698a6b28ef8de7bb8ff",
+        "bold_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_bold_italic_d6ac2c69cf061ee5c463e149d34abed5",
+        "800_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_800_italic_094658e1d0777e8569ec3a3492ac5803",
+        "900_italic": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_900_italic_f6a5eb57f8f80c230ce4470c6fe4967a",
+        "100": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_100_00991519a1eec0ff593037a02be44648",
+        "200": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_200_9cbe66a7892f4692dc376a7969521d5a",
+        "300": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_300_c5891add0956b4afefd2e80209f2c03e",
+        "normal": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_normal_155638d82c044167a12fc15f085a09f9",
+        "500": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_500_a678cb239559a9af657d1832de0c11cf",
+        "600": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_600_66044a8d8e02d5a0e88de91cd6299b71",
+        "bold": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_bold_788e18efc0927851f7c2d4f7fc5a2e3f",
+        "800": "\/home\/1116423.cloudwaysapps.com\/weeypyydka\/public_html\/wp-content\/plugins\/wp360-invoice\/dompdf\/vendor\/dompdf\/dompdf\/lib\/fonts\/work_sans_800_9742d11547271278ea250b8ba5773377",
+        "900": "work_sans_900_58dd6ba4bc48d259821172a3b7814f51"
+    }
+}

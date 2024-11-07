@@ -53,6 +53,8 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 $invoice_firm = get_post_meta($invoice->ID, 'invoice_firm', true);
                 $user_info = get_userdata($user_id);
                 $invoice_amount = floatval(get_post_meta($invoice->ID, 'invoice_amount', true));
+                $invoiceStatus = get_post_meta($invoice->ID, 'invoice_status', true);
+                $invoiceReceipt = get_post_meta($invoice->ID, 'payment_receipt', true);
                 $data[] = array(
                     'ID'               => $invoice->ID,
                     'invoice_number'   => sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)),
@@ -63,6 +65,9 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_address'   => $invoice_address,
                     'invoice_bank'   => !empty($invoice_bank) ? $invoice_bank : 'N/A' ,
                     'invoice_type'     => sanitize_text_field(ucfirst(get_post_meta($invoice->ID, 'invoice_type', true))),
+                    'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
+                    'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
+                    'invoice_download'     => '<a href="#" class="admin-wp360invoice_download button wp-element-button bordered-button" data-invoice-id="'.sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)).'">'.__('Download', 'text-domain').'</a>',
                     'action'     => '<a href="'.$new_url.'">Edit</a>',
                 );
             }
@@ -79,6 +84,9 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 'invoice_address'    => esc_html__('Address', 'wp360-invoice'),
                 'invoice_bank'    => esc_html__('Bank Details', 'wp360-invoice'),
                 'invoice_type'      => esc_html__('Invoice Type', 'wp360-invoice'),
+                'invoice_status'      => esc_html__('Invoice Status', 'wp360-invoice'),
+                'invoice_receipt'      => esc_html__('Receipt', 'wp360-invoice'),
+                'invoice_download'      => esc_html__('Download PDF', 'wp360-invoice'),
                 'action'      => esc_html__('Action', 'wp360-invoice'),
             );
         }
@@ -128,6 +136,7 @@ function wp360invoice_display_invoices_list_table() {
     $wp360_invoices_list_table->prepare_items();
     $wp360_invoices_list_table->display();
 }
+
 ?>
 <div class="wrap">
     <?php echo wp_kses_post(wp360invoice_admin_tabs()); ?>
@@ -149,5 +158,11 @@ function wp360invoice_display_invoices_list_table() {
             wp360invoice_display_invoices_list_table();
         ?>
     </form>
+    <div id="wp360_invoice_receipt_modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modalImage" src="" alt="Image" />
+        </div>
+    </div>
 </div>
 
