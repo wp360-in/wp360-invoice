@@ -319,6 +319,46 @@ $hover-color: #2a3d75;
     }
     border: none;
 }
+#wp360_invoice_receipt_modal {
+    display: none; 
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    .modal-content {
+        background-color: #fefefe;
+        margin: clamp(50px, 5vw, 5vw) auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: calc(100% - 30px);
+        text-align: center;
+        max-width: 1500px;
+        position: relative;
+    }    
+    .close {
+        font-size: 28px;
+        font-weight: bold;
+        aspect-ratio: 1 / 1;
+        background: #080808;
+        padding: 5px;
+        border-radius: 50%;
+        color: white;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        z-index: 5;
+        text-decoration: none;
+        cursor: pointer;
+        line-height: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }    
+}
 @media print {
     .container{
         padding: 0!important;

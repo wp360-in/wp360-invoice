@@ -8,6 +8,14 @@ if (!class_exists('Wp360_Suite')) {
             // Hook to add the admin menu
             add_action('admin_menu', array($this, 'wp360invoice_add_admin_menu'));
             add_action('admin_enqueue_scripts', array($this, 'wp360invoice_enqueue_scripts_and_styles'));
+            
+            add_action('wp_ajax_generate_invoice_pdf', array($this, 'wp360_invoice_generate_pdf'));
+            add_action('wp_ajax_nopriv_generate_invoice_pdf', array($this, 'wp360_invoice_generate_pdf'));
+        }
+        public function wp360_invoice_generate_pdf() {
+            check_ajax_referer('wp360_generate_pdf_nonce', 'nonce');             
+            require ABSPATH . 'wp-content/plugins/' . WP360_SLUG .'/wp360_invoice_pdf.php';
+            wp_die();
         }
         public function wp360invoice_enqueue_scripts_and_styles() {    
             wp_enqueue_style('wp360_suite_style', plugin_dir_url(__FILE__) . 'css/suite.css', array(), '1.0.0');
