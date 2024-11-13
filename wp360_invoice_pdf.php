@@ -187,25 +187,33 @@
         $invoicetype    = esc_html(get_post_meta($invoiceID, 'invoice_type', true));
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
-        }
+        }        
     ?>    
         <table class="invoice-header">
             <tbody>                        
                 <tr>
                     <td class="logo">
                         <?php
-                            $firm = get_post_meta($invoiceID, 'invoice_firm', true);
-                            if(!empty($firm['text_logo'])){
-                                echo '<h4>'.$firm['text_logo'].'</h4>';
+                            $saved_invoice_firm = get_option('wp360_firm_details', array());
+                            $invFirm = get_post_meta($invoiceID, 'invoice_firm', true);
+                            if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+                                foreach ($saved_invoice_firm as $index => $firm) {
+                                    if (!empty($invFirm) && ($firm['id'] == $invFirm['id'])) {
+                                        $invFirm = $firm;
+                                    }
+                                }
                             }
-                            elseif(!empty($firm['logo_url'])){
-                                echo '<img src="'.esc_url($firm['logo_url']).'">';
+                            if(!empty($invFirm['text_logo'])){
+                                echo '<h4>'.$invFirm['text_logo'].'</h4>';
+                            }
+                            elseif(!empty($invFirm['logo_url'])){
+                                echo '<img src="'.esc_url($invFirm['logo_url']).'">';
                             }
                             ?>
                         <small>
                             <?php 
-                                if(!empty($firm['tagline'])){
-                                    echo $firm['tagline'];
+                                if(!empty($invFirm['tagline'])){
+                                    echo $invFirm['tagline'];
                                 }
                             ?>
                         </small>
