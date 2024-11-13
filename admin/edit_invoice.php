@@ -130,18 +130,29 @@ $invoiceFirm = get_post_meta($invoiceID, 'invoice_firm', true);
                     if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
                         echo '<select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>
                         <option value="">' . esc_html__("Select firm details", "wp360-invoice") . '</option>';
+                        
                         foreach ($saved_invoice_firm as $index => $firm) {
                             $selected = '';
-                            if(!empty($invoiceFirm)){
+                            if (!empty($invoiceFirm)) {
                                 $selected = ($firm['id'] == $invoiceFirm['id'] ? 'selected' : '');
-                            }                            
-                            echo '<option value="'.wp_kses($firm['firm_name'], $allowed_html).'"'. esc_html($selected) .' data-firm-id="'. esc_attr($firm['id']) .'" data-logo="'. esc_attr($firm['logo_url']) .'" data-tagline="'. esc_attr($firm['tagline']) .'" data-text-logo="'. esc_attr($firm['text_logo']) .'">'.esc_html($firm['firm_name']).'</option></select>';
+                            }
+                            
+                            echo '<option value="' . esc_attr($firm['firm_name']) . '" ' . esc_html($selected) .
+                                ' data-firm-id="' . esc_attr($firm['id']) . '"' .
+                                ' data-logo="' . esc_attr($firm['logo_url']) . '"' .
+                                ' data-tagline="' . esc_attr($firm['tagline']) . '"' .
+                                ' data-text-logo="' . esc_attr($firm['text_logo']) . '">' .
+                                esc_html($firm['firm_name']) . '</option>';
                         }
+
+                        echo '</select>'; // Closing </select> tag moved outside the foreach loop
+                    } else {
+                        echo '<select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth">
+                            <option value="">' . esc_html__("No firm/business details available.", "wp360-invoice") . '</option>
+                            </select>';
                     }
-                    else{
-                        echo '<select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth"><option value="">' . esc_html__("No firm/business details availble.", "wp360-invoice") . '</option></select>';
-                    }
-                ?>
+                    ?>
+
                 </select>
                 <input type="hidden" name="wp360_invoice_firm_id" id="firm_id" value="<?php echo !empty($invoiceFirm['id']) ? $invoiceFirm['id'] : ''; ?>">
                 <input type="hidden" name="wp360_invoice_firm_logo" id="firm_logo" value="<?php echo !empty($invoiceFirm['logo_url']) ? $invoiceFirm['logo_url'] : ''; ?>">
