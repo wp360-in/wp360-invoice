@@ -12,7 +12,7 @@ jQuery(document).ready(function($) {
             data: {
                 action: 'generate_invoice_pdf',
                 nonce: wp360_pdf_ajax.nonce,
-                invoice_data: $('input[name="wp360invoice_id"]').val() // Get the invoice ID from the URL
+                invoice_data: $(this).data('id') // Get the invoice ID from the URL
             },
             xhrFields: {
                 responseType: 'blob' // Ensures the response is treated as a file (binary)

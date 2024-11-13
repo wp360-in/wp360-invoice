@@ -165,6 +165,7 @@ jQuery(document).ready(function($) {
     $(".admin-wp360invoice_download").on("click", function(e) {        
         e.preventDefault();
         var inv_id = $(e.target).data('invoice-id');
+        var inv_name = $(e.target).data('invoice-name');
         $.ajax({
             url: wp360_pdf_ajax_admin.ajax_url,
             method: 'POST',
@@ -180,7 +181,7 @@ jQuery(document).ready(function($) {
                 var blob = new Blob([response], { type: 'application/pdf' });
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = `invoice-${inv_id}.pdf`;
+                link.download = `invoice-${inv_name}.pdf`;
                 link.click(); // Programmatically trigger the download
             },
             error: function(jqXHR, textStatus, errorThrown) {
