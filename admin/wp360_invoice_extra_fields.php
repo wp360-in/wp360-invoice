@@ -52,10 +52,10 @@
             return false;
         }
 
-        $field_names = isset($_POST['wp360_invoice_field_names']) ? sanitize_text_field($_POST['wp360_invoice_field_names']) : [];
-        $field_values = isset($_POST['wp360_invoice_field_values']) ? sanitize_text_field($_POST['wp360_invoice_field_values']) : [];
-
+        $field_names = isset($_POST['wp360_invoice_field_names']) && is_array($_POST['wp360_invoice_field_names']) ? array_map('sanitize_text_field', $_POST['wp360_invoice_field_names']) : [];
+        $field_values = isset($_POST['wp360_invoice_field_values']) && is_array($_POST['wp360_invoice_field_values']) ? array_map('sanitize_text_field', $_POST['wp360_invoice_field_values']) : [];
         $invoice_fields = [];
+
         for ($i = 0; $i < count($field_values); $i++) {
             if (!empty($field_values[$i]) || !empty($field_names[$i])) {
                 $invoice_fields[] = [

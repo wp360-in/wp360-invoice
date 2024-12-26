@@ -81,7 +81,7 @@ function wp360invoice_showInvoice($invoiceID){
         $companyPhone = get_user_meta($userID, 'billing_phone', true);
 
         #Customer Data
-        $custName       = esc_html(get_user_meta($invoiceUserID, 'billing_first_name', true)).' '.esc_html(get_user_meta($userID, 'billing_last_name', true));        
+        $custName       = esc_html(get_user_meta($invoiceUserID, 'billing_first_name', true)).' '.esc_html(get_user_meta($invoiceUserID, 'billing_last_name', true));        
         $custLine1      = esc_html(get_user_meta($invoiceUserID, 'billing_address_1', true));
         $custLine2      = esc_html(get_user_meta($invoiceUserID, 'billing_address_2', true));
         $custCountry    = esc_html(get_user_meta($invoiceUserID, 'billing_country', true));
@@ -89,9 +89,8 @@ function wp360invoice_showInvoice($invoiceID){
         $custState      = esc_html(get_user_meta($invoiceUserID, 'billing_state', true));
         $custPostCode   = esc_html(get_user_meta($invoiceUserID, 'billing_postcode', true));
         $custPhone   = esc_html(get_user_meta($invoiceUserID, 'billing_phone', true));
-        $custEmail   = esc_html(get_user_meta($invoiceUserID, 'user_email', true));
+        $custEmail   = esc_html(get_userdata($invoiceUserID)->user_email);
         #Customer Data Ends
-
         $addressParts = [];
         if (!empty($custLine1)) {
             $addressParts[] = $custLine1;
@@ -119,6 +118,7 @@ function wp360invoice_showInvoice($invoiceID){
             $invoicetype = 'Items';
         }
     ?> 
+        <div class="wp360invpdf_loader flex"><span class="loader"></span></div>
         <div class="wp360Invoice_action_buttons hidden-print">            
             <div class="wp360Invoice_action_buttons_wrap">                
                 <input type="hidden" name="wp360invoice_id" value="<?php echo sanitize_text_field(get_post_meta($invoiceID, 'invoice_number', true));?>">
@@ -175,19 +175,26 @@ function wp360invoice_showInvoice($invoiceID){
                         ?>
                     </small> -->
                     <?php
-                        $firm = get_post_meta($invoiceID, 'invoice_firm', true);
-                        if(!empty($firm['text_logo'])){
-                            echo '<h4>'.$firm['text_logo'].'</h4>';
+                        $saved_invoice_firm = get_option('wp360_firm_details', array());
+                        $invFirm = get_post_meta($invoiceID, 'invoice_firm', true);
+                        if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+                            foreach ($saved_invoice_firm as $index => $firm) {
+                                if (!empty($invFirm) && ($firm['id'] == $invFirm['id'])) {
+                                    $invFirm = $firm;
+                                }
+                            }
                         }
-                        elseif(!empty($firm['logo_url'])){
-                            echo '<img src="'.esc_url($firm['logo_url']).'" alt="logo">';
+                        if(!empty($invFirm['text_logo'])){
+                            echo '<h4>'.$invFirm['text_logo'].'</h4>';
+                        }
+                        elseif(!empty($invFirm['logo_url'])){
+                            echo '<img src="'.esc_url($invFirm['logo_url']).'">';
                         }
                         ?>
                     <small>
-						<!-- Digital Consultant and Software Developer -->
-                        <?php //echo '<pre>', print_r($firm), '</pre>';
-                            if(!empty($firm['tagline'])){
-                                echo $firm['tagline'];
+                        <?php 
+                            if(!empty($invFirm['tagline'])){
+                                echo $invFirm['tagline'];
                             }
                         ?>
                     </small>
@@ -230,8 +237,8 @@ function wp360invoice_showInvoice($invoiceID){
                             if(!empty($custPhone)){
                                 echo '<b>'.esc_html__( 'Phone :','wp360-invoice' ).'</b>'.esc_html($custPhone).'<br>';
                             }
-                            if(!empty($companyEmail)){
-                                echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($companyEmail).'<br>';
+                            if(!empty($custEmail)){
+                                echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($custEmail).'<br>';
                             }
                         ?>
                         <?php

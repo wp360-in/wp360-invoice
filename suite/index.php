@@ -57,12 +57,12 @@ if (!class_exists('Wp360_Suite')) {
                     </div>
                     <div class="list">';
                     foreach ($this->wp360invoice_addons() as $addon) {
-                        $status = 'not_installed';
-                        $actionName = 'Get it';
-                        $action = '';
-                        if(isset($addon['repo_url'])){
-                            $action = $addon['repo_url'];
-                        }
+                        $status = 'coming_up';
+                        $actionName = 'Coming Soon';
+                        $action = 'javascript:;';
+                        // if(isset($addon['repo_url'])){
+                        //     $action = $addon['repo_url'];
+                        // }
                         
 
                         $target = '';
@@ -80,7 +80,7 @@ if (!class_exists('Wp360_Suite')) {
                         } 
                         if(!isset($addon['repo_url']) || !$addon['repo_url']){
                             $status = 'coming_up';
-                            $actionName = 'Comming up';
+                            $actionName = 'Coming Soon';
                             $action = 'javascript:;';
                         }
                         echo '
@@ -153,10 +153,10 @@ if (!class_exists('Wp360_Suite')) {
         }
         public function wp360invoice_render_page(){
             if(isset($_GET['tab']) && $_GET['tab'] === 'settings'){
-                require_once esc_url(plugin_dir_path(__FILE__)).'../admin/wp360_invoice_settings.php';
+                require_once plugin_dir_path(__FILE__).'../admin/wp360_invoice_settings.php';
             }
             else{
-                require_once esc_url(plugin_dir_path(__FILE__)).'../admin/all_invoices.php';
+                require_once plugin_dir_path(__FILE__).'../admin/all_invoices.php';
             }            
         }
     }

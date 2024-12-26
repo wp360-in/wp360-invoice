@@ -17,6 +17,9 @@ jQuery(document).ready(function($) {
             xhrFields: {
                 responseType: 'blob' // Ensures the response is treated as a file (binary)
             },
+            beforeSend: function(){
+                $('.wp360invpdf_loader').addClass('active');
+            },
             success: function(response, status, xhr) {
                 var blob = new Blob([response], { type: 'application/pdf' });
                 var link = document.createElement('a');
@@ -26,6 +29,11 @@ jQuery(document).ready(function($) {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error generating PDF: ' + errorThrown);
+            },
+            complete: function(){
+                setTimeout(function() {
+                    $('.wp360invpdf_loader').removeClass('active');
+                }, 2000);
             }
         });
     });
