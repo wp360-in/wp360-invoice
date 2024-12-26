@@ -151,7 +151,10 @@
         $companyPhone = get_user_meta($userID, 'billing_phone', true);
 
         #Customer Data
-        $custName       = esc_html(get_user_meta($invoiceUserID, 'billing_first_name', true)).' '.esc_html(get_user_meta($userID, 'billing_last_name', true));        
+        $firstName = esc_html(get_user_meta($invoiceUserID, 'billing_first_name', true));
+        $lastName = esc_html(get_user_meta($invoiceUserID, 'billing_last_name', true));
+
+        $custName = trim($firstName . ' ' . $lastName);     
         $custLine1      = esc_html(get_user_meta($invoiceUserID, 'billing_address_1', true));
         $custLine2      = esc_html(get_user_meta($invoiceUserID, 'billing_address_2', true));
         $custCountry    = esc_html(get_user_meta($invoiceUserID, 'billing_country', true));
@@ -159,30 +162,35 @@
         $custState      = esc_html(get_user_meta($invoiceUserID, 'billing_state', true));
         $custPostCode   = esc_html(get_user_meta($invoiceUserID, 'billing_postcode', true));
         $custPhone   = esc_html(get_user_meta($invoiceUserID, 'billing_phone', true));
-        $custEmail   = esc_html(get_user_meta($invoiceUserID, 'user_email', true));
+        $custEmail   = esc_html(get_userdata($invoiceUserID)->user_email);
         #Customer Data Ends
 
         $addressParts = [];
+
+        // Add address parts if they are not empty
         if (!empty($custLine1)) {
-            $addressParts[] = $custLine1;
+            $addressParts[] = esc_html($custLine1);
         }
         if (!empty($custLine2)) {
-            $addressParts[] = (!empty($custLine1) ? "<br>" : "") . $custLine2;
+            $addressParts[] = esc_html($custLine2);
         }
         if (!empty($custCity)) {
-            $addressParts[] = $custCity;
+            $addressParts[] = esc_html($custCity);
         }
         if (!empty($custPostCode)) {
-            $addressParts[] = $custPostCode;
+            $addressParts[] = esc_html($custPostCode);
         }
         if (!empty($custState)) {
-            $addressParts[] = $custState;
+            $addressParts[] = esc_html($custState);
         }
         if (!empty($custCountry)) {
-            $addressParts[] = $custCountry;
+            $addressParts[] = esc_html($custCountry);
         }
-        $custAddress    = esc_html(implode(', ', $addressParts));
-        $custAddress = $custLine1.' <br> '.$custCity.', '.$custPostCode.', '.$custState.', '.$custCountry;
+
+        // Join non-empty parts with a comma, and add <br> where needed
+        $custAddress = implode(', ', array_filter($addressParts));
+        $custAddress = nl2br($custAddress); // Converts new lines to <br> tags
+
         $invoiceItems   = get_post_meta($invoiceID, 'invoice_items', true);
         $invoicetype    = esc_html(get_post_meta($invoiceID, 'invoice_type', true));
         if($invoicetype == 'fixed'){
@@ -243,29 +251,29 @@
                 <td style="text-align: right;">
                     <div style="display: inline-block; text-align: left;">
                         <h4><?php esc_html_e('Bill To', 'wp360-invoice');?></h4>
-                            <p>
-                                <?php echo esc_html($custName);?> <br>
-                                <?php echo wp_kses_post($custAddress);?>
-                            </p>
-                            <p>
-                                <?php
-                                    if(!empty($custPhone)){
-                                        echo '<b>'.esc_html__( 'Phone :','wp360-invoice' ).'</b>'.esc_html($custPhone).'<br>';
+                        <p>
+                            <?php echo !empty($custName) ? esc_html($custName).'<br>' : ''; ?>
+                            <?php echo wp_kses_post($custAddress);?>
+                        </p>
+                        <p>
+                            <?php
+                                if(!empty($custPhone)){
+                                    echo '<b>'.esc_html__( 'Phone :','wp360-invoice' ).'</b>'.esc_html($custPhone).'<br>';
+                                }
+                                if(!empty($custEmail)){
+                                    echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($custEmail).'<br>';
+                                }
+                            ?>
+                            <?php
+                                $extraFields = get_user_meta($invoiceUserID, 'wp360_invoice_user_extra_fields', true);
+                                if(!empty($extraFields)){
+                                    foreach ($extraFields as $field) {
+                                        if(!empty($field['name'])) echo '<b>' . esc_html($field['name']).' :' . '</b> ';
+                                        if(!empty($field['value'])) echo esc_html($field['value']) . '<br>';
                                     }
-                                    if(!empty($companyEmail)){
-                                        echo '<b>'.esc_html__( 'Email :','wp360-invoice' ).'</b>'.esc_html($companyEmail).'<br>';
-                                    }
-                                ?>
-                                <?php
-                                    $extraFields = get_user_meta($invoiceUserID, 'wp360_invoice_user_extra_fields', true);
-                                    if(!empty($extraFields)){
-                                        foreach ($extraFields as $field) {
-                                            if(!empty($field['name'])) echo '<b>' . esc_html($field['name']).' :' . '</b> ';
-                                            if(!empty($field['value'])) echo esc_html($field['value']) . '<br>';
-                                        }
-                                    }
-                                ?>
-                            </p>
+                                }
+                            ?>
+                        </p>
                     </div>
                 </td>
             </tr>

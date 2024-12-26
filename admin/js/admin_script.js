@@ -175,7 +175,10 @@ jQuery(document).ready(function($) {
                 invoice_data: inv_id
             },
             xhrFields: {
-                responseType: 'blob' // Ensures the response is treated as a file (binary)
+                responseType: 'blob'
+            },
+            beforeSend: function(){
+                $(".admin-wp360invoice_download").addClass('disabled').css("pointer-events", "none");
             },
             success: function(response, status, xhr) {
                 var blob = new Blob([response], { type: 'application/pdf' });
@@ -186,6 +189,11 @@ jQuery(document).ready(function($) {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error generating PDF: ' + errorThrown);
+            },
+            complete: function(){
+                setTimeout(function() {
+                    $(".admin-wp360invoice_download").removeClass('disabled').css("pointer-events", "auto");
+                }, 2000);
             }
         });
     });

@@ -18,6 +18,7 @@ delete_option('wp360_thankyoumsg');
 delete_option('wp360_invoicestartnumber');
 delete_option('wp360_invoice_addresses');
 delete_option('wp360_invoice_banking');
+delete_option('wp360_firm_details');
 
 $wp360_posts = get_posts(
 	[

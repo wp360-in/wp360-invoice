@@ -410,6 +410,29 @@
           justify-content: center;
 }
 
+.woocommerce-MyAccount-content {
+  position: relative;
+}
+.woocommerce-MyAccount-content .wp360invpdf_loader {
+  background-color: rgba(255, 255, 255, 0.5);
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: absolute;
+  inset: 0px;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.woocommerce-MyAccount-content .wp360invpdf_loader.active {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 @media print {
   .container {
     padding: 0 !important;
