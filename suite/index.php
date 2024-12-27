@@ -58,7 +58,7 @@ if (!class_exists('Wp360_Suite')) {
                     <div class="list">';
                     foreach ($this->wp360invoice_addons() as $addon) {
                         $status = 'coming_up';
-                        $actionName = 'Coming Soon';
+                        $actionName = __('Coming Soon', 'wp360-invoice');
                         $action = 'javascript:;';
                         // if(isset($addon['repo_url'])){
                         //     $action = $addon['repo_url'];
@@ -70,17 +70,17 @@ if (!class_exists('Wp360_Suite')) {
                         $isinstalled = file_exists( $pathpluginurl );
                         if ($isinstalled ) {
                             $status = 'installed';
-                            $actionName = 'Activate';
+                            $actionName = __('Activate', 'wp360-invoice');
                             $action = '#activateplugin';
                         }
                         if (is_plugin_active($addon['path'])) {
                             $status = 'activated';
-                            $actionName = 'Activated';
+                            $actionName = __('Activated', 'wp360-invoice');
                             $action = 'javascript:;';
                         } 
                         if(!isset($addon['repo_url']) || !$addon['repo_url']){
                             $status = 'coming_up';
-                            $actionName = 'Coming Soon';
+                            $actionName = __('Coming Soon', 'wp360-invoice');
                             $action = 'javascript:;';
                         }
                         echo '
