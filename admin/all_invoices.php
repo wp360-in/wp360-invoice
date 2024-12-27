@@ -68,7 +68,7 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
                     'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
                     'invoice_download'     => '<a href="#" class="admin-wp360invoice_download button wp-element-button bordered-button" data-invoice-id="'.$invoice->ID.'" data-invoice-name="'.sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)).'">'.__('Download', 'text-domain').'</a>',
-                    'action'     => '<a href="'.$new_url.'">Edit</a>',
+                    'action'     => '<a href="<?php echo esc_url( $new_url ); ?>">'.__('Edit', 'wp360-invoice').'</a>',
                 );
             }
             return $data;
@@ -146,7 +146,7 @@ function wp360invoice_display_invoices_list_table() {
             require_once'edit_invoice.php';
         else:        
     ?>
-    <a href="javascript:;" onclick="wp360toggleCustomFun('.wp360_invoice_toggleNewInvoice')" class="page-title-action"><?php esc_html_e('Add New Invoice', 'wp360-invoice');?></a>
+    <button onclick="wp360toggleCustomFun('.wp360_invoice_toggleNewInvoice')" class="page-title-action"><?php esc_html_e('Add New Invoice', 'wp360-invoice');?></button>
     <div class="wp360_invoice_toggleNewInvoice" style="display:none;">
         <?php require_once'add_invoice.php'; ?>
     </div>
