@@ -60,9 +60,11 @@ $color:#007cba;
                             color: $color;
                             padding: 0;
                             text-align: left;
+                            pointer-events: none;
                         }
                         &.coming_up{
                             background-color: #d0cece;
+                            pointer-events: none;
                         }
                         &.installed{
                             background: #fff;

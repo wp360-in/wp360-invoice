@@ -69,9 +69,11 @@
   color: #007cba;
   padding: 0;
   text-align: left;
+  pointer-events: none;
 }
 .wp360_main_dashboard .wp360_content .inner_list .wrapitem .link a.coming_up {
   background-color: #d0cece;
+  pointer-events: none;
 }
 .wp360_main_dashboard .wp360_content .inner_list .wrapitem .link a.installed {
   background: #fff;

@@ -337,12 +337,3 @@ function wp360invoice_showInvoice($invoiceID){
     <?php       
     endif;
 }
-
-// Handle AJAX PDF generation
-// function wp360_generate_pdf_invoice() {
-//     // Check nonce for security
-//     check_ajax_referer('wp360_generate_pdf_nonce', 'nonce');
-//     require ABSPATH . 'wp-content/plugins/' . WP360_SLUG .'/wp360_invoice_pdf.php';
-// }
-// add_action('wp_ajax_generate_pdf_invoice', 'wp360_generate_pdf_invoice');
-// add_action('wp_ajax_nopriv_generate_pdf_invoice', 'wp360_generate_pdf_invoice');
