@@ -144,7 +144,10 @@
         $invoiceNumber  = esc_html(get_post_meta($invoiceID, 'invoice_number', true));
         $invoiceUserID  = get_post_meta($invoiceID, 'invoice_user', true);
         $invoiceUser = get_userdata($invoiceUserID);
-        $currency       = get_woocommerce_currency_symbol();
+        $currency = '';
+        if (class_exists('WooCommerce')) {
+            $currency = get_woocommerce_currency_symbol();
+        }
         $userID         = get_current_user_id();
         $userData       = get_userdata($userID);
         $companyEmail          = $userData->user_email;

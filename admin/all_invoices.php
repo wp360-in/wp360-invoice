@@ -4,6 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 if (!class_exists('WP_List_Table')) {
     require_once ABSPATH.'wp-admin/includes/class-wp-list-table.php';
+    require_once(ABSPATH . 'wp-admin/includes/class-wp-screen.php');
+    require_once(ABSPATH . 'wp-admin/includes/template.php');
+    require_once ABSPATH . 'wp-admin/includes/screen.php';
 }
 if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
     class WP360INVOICE_Invoices_List_Table extends WP_List_Table {
@@ -68,14 +71,19 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
                     'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
                     'invoice_download'     => '<a href="#" class="admin-wp360invoice_download button wp-element-button bordered-button" data-invoice-id="'.$invoice->ID.'" data-invoice-name="'.sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)).'">'.__('Download', 'text-domain').'</a>',
-                    'action'     => '<a href="<?php echo esc_url( $new_url ); ?>">'.__('Edit', 'wp360-invoice').'</a>',
                 );
+                if (is_admin() && current_user_can('manage_options')) {
+                    $data[count($data) - 1]['actions'] = '<a href="' . esc_url($new_url) . '">' . __('Edit', 'wp360-invoice') . '</a>';
+                }
             }
             return $data;
         }
         function get_columns() {
-            return array(
-                'cb'                => '<input type="checkbox" />',
+            $cols = array();
+            if (is_admin() && current_user_can('manage_options')) {
+                $cols['cb'] = '<input type="checkbox" />';                
+            }
+            $cols = array_merge($cols, array(
                 'invoice_number'    => esc_html__('Invoice Number', 'wp360-invoice'),
                 'user'              => esc_html__('User', 'wp360-invoice'),
                 'invoice_title'     => esc_html__('Invoice Title', 'wp360-invoice'),
@@ -87,8 +95,12 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 'invoice_status'      => esc_html__('Invoice Status', 'wp360-invoice'),
                 'invoice_receipt'      => esc_html__('Receipt', 'wp360-invoice'),
                 'invoice_download'      => esc_html__('Download PDF', 'wp360-invoice'),
-                'action'      => esc_html__('Action', 'wp360-invoice'),
-            );
+                // 'actions' => esc_html__('Action', 'wp360-invoice')
+            ));
+            if (is_admin() && current_user_can('manage_options')) {
+                $cols['actions'] = esc_html__('Action', 'wp360-invoice');
+            }
+            return $cols;
         }
         function get_sortable_columns() {
             return array(
@@ -104,9 +116,12 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
             return '<input type="checkbox" name="invoice[]" value="' . esc_html($item['ID']) . '" />';
         }
         function get_bulk_actions() {
-            $actions = array(
-                'delete' => 'Delete',
-            );
+            $actions = '';
+            if (is_admin() && current_user_can('manage_options')) {
+                $actions = array(
+                    'delete' => 'Delete',
+                );
+            }
             return $actions;
         }
         function process_bulk_action() {
@@ -138,18 +153,24 @@ function wp360invoice_display_invoices_list_table() {
 }
 
 ?>
-<div class="wrap">
-    <?php echo wp_kses_post(wp360invoice_admin_tabs()); ?>
+<div class="wrap alignwide">
+    <?php 
+        if (is_admin() && current_user_can('manage_options')) {
+            echo wp_kses_post(wp360invoice_admin_tabs()); 
+    }   ?>
     <h1 class="wp-heading-inline"><?php esc_html_e('wp360 invoices', 'wp360-invoice');?></h1>
     <?php 
         if(isset($_GET['invoice_id']) && !empty($_GET['invoice_id'])):
             require_once'edit_invoice.php';
         else:        
-    ?>
-    <button onclick="wp360toggleCustomFun('.wp360_invoice_toggleNewInvoice')" class="page-title-action"><?php esc_html_e('Add New Invoice', 'wp360-invoice');?></button>
-    <div class="wp360_invoice_toggleNewInvoice" style="display:none;">
-        <?php require_once'add_invoice.php'; ?>
-    </div>
+    ?>   
+        <?php if (is_admin() && current_user_can('manage_options')) { ?>
+            <button onclick="wp360toggleCustomFun('.wp360_invoice_toggleNewInvoice')" class="page-title-action"><?php esc_html_e('Add New Invoice', 'wp360-invoice');?></button>
+            <div class="wp360_invoice_toggleNewInvoice" style="display:none;">
+                <?php require_once'add_invoice.php'; ?>
+            </div>
+        <?php } ?>
+    
     <?php endif;?>
 
     <form method="post">

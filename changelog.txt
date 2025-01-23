@@ -1,0 +1,17 @@
+== Changelog ==
+
+= 1.0.0 2024-05-01 =
+
+* Update - this is the first release. working on multisite
+
+
+= 1.0.0 2024-12-31 =
+* Added support for Firm addresses
+* Added support for Banks
+* Added support Invoice PDF download
+
+= 1.0.3 2025-01-23 =
+* New dashboard for Invoices 
+* New update for View Invoice
+* Styling updates for View Invoice and Invoice dashboard
+* Update for plugin to work independently of WooCommerce

@@ -10,7 +10,7 @@ if (!class_exists('Wp360_Suite')) {
             add_action('admin_enqueue_scripts', array($this, 'wp360invoice_enqueue_scripts_and_styles'));
             
             add_action('wp_ajax_generate_invoice_pdf', array($this, 'wp360_invoice_generate_pdf'));
-            add_action('wp_ajax_nopriv_generate_invoice_pdf', array($this, 'wp360_invoice_generate_pdf'));
+            add_action('wp_ajax_nopriv_generate_invoice_pdf', array($this, 'wp360_invoice_generate_pdf'));            
         }
         public function wp360_invoice_generate_pdf() {
             check_ajax_referer('wp360_generate_pdf_nonce', 'nonce');             
@@ -158,7 +158,7 @@ if (!class_exists('Wp360_Suite')) {
             else{
                 require_once plugin_dir_path(__FILE__).'../admin/all_invoices.php';
             }            
-        }
+        }        
     }
     // Instantiate the class
     $wp360_suite = new Wp360_Suite();

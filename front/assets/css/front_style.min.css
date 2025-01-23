@@ -10,8 +10,7 @@
           box-sizing: border-box;
   padding: 50px 60px 60px;
   color: #525252;
-  margin-inline: auto;
-  margin-top: 50px;
+  margin: auto;
 }
 .wp360InvoiceCon h2, .wp360InvoiceCon h4, .wp360InvoiceCon th, .wp360InvoiceCon strong {
   color: #000;
@@ -176,121 +175,41 @@
   text-align: center;
 }
 
-.wp360invoice_btma_wrap {
-  margin-bottom: 1rem;
-  text-align: right;
-}
-
-.wp360invoice_btma {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-  padding: 10px 20px;
-  background: #fff;
-  border: 1px solid #e4eaee;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  gap: 8px;
-  font-size: 1rem;
-  -webkit-transition: 0.3s ease background-color;
-  transition: 0.3s ease background-color;
-}
-.wp360invoice_btma:hover {
-  background-color: #e4eaee;
-}
-
-.wp360invoiceSummaryTable {
-  border-collapse: collapse;
-  margin: 0px;
-  font-size: 1rem;
-  border-radius: 10px;
-  -webkit-box-shadow: 0 0 0px 1px #d7d7d7;
-          box-shadow: 0 0 0px 1px #d7d7d7;
-}
-.wp360invoiceSummaryTable thead th {
-  text-align: left;
-  background: #E4EAEE;
-  padding-block: 12px;
-}
-.wp360invoiceSummaryTable tbody tr:not(:last-of-type) {
-  border-bottom: 1px solid #d7d7d7;
-}
-.wp360invoiceSummaryTable tbody td {
-  padding-block: 16px;
-}
-.wp360invoiceSummaryTable tbody td.wp360View_inv a {
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: #f0f0f0;
-  font-weight: 600;
-}
-.wp360invoiceSummaryTable th, .wp360invoiceSummaryTable td {
-  vertical-align: top !important;
-  padding-inline: 24px;
-}
-.wp360invoiceSummaryTable .wp360InvoiceSummary {
+.summaryTable {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.wp360invoiceSummaryTable .wp360InvoiceSummary li {
+.summaryTable li {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding-bottom: 15px;
-  margin-bottom: 15px;
-  border-bottom: solid 1px #d7d7d7;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
-  gap: 10px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: solid 1px #e4eaee;
 }
-.wp360invoiceSummaryTable .wp360InvoiceSummary li:last-child {
+.summaryTable li .itemPrice {
+  padding-left: 30px;
+}
+.summaryTable li:last-child {
   border-bottom: none;
 }
-.wp360invoiceSummaryTable .wp360InvoiceSummary li .itemDesc {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-}
-.wp360invoiceSummaryTable .wp360InvoiceSummary li .itemQty {
-  font-weight: bold;
-}
 
-.wp360invoiceSummaryTable--pagination {
-  font-size: 1rem;
-  margin-block: 1rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  gap: 10px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  line-height: normal;
+.invoiceSummaryTable {
+  border-collapse: collapse;
+  margin: 0px;
 }
-.wp360invoiceSummaryTable--pagination span[aria-current=page] {
-  aspect-ratio: 1/1;
-  padding-inline: 10px;
-  border-radius: 50px;
-  background: #E4EAEE;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  line-height: 0px;
-  font-weight: 600;
+.invoiceSummaryTable thead th {
+  text-align: left;
+  background: #f6f6f6;
+  padding-block: 12px;
+}
+.invoiceSummaryTable th, .invoiceSummaryTable td {
+  vertical-align: top !important;
+  padding-inline: 18px;
 }
 
 .wp360Invoice_action_buttons_wrap {
@@ -315,20 +234,12 @@
       -ms-flex-align: center;
           align-items: center;
   gap: 6px 12px;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #d2d2d2;
-  font-size: 16px;
-}
-.wp360Invoice_action_buttons._justify {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-}
-.wp360Invoice_action_buttons .wp360invoice_btma {
-  margin-right: auto;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #d2d2d2;
+  font-size: 16px;
 }
 .wp360Invoice_action_buttons #wp360-invoice_printinvoice, .wp360Invoice_action_buttons .wp360_invoice_status_update, .wp360Invoice_action_buttons .view_receipt {
   background: #fff;
@@ -476,18 +387,12 @@
 #wp360_invoice_receipt_modal .modal-content {
   background-color: #fefefe;
   margin: clamp(50px, 5vw, 5vw) auto;
+  padding: 20px;
   border: 1px solid #888;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: calc(100% - 30px);
   text-align: center;
+  max-width: 1500px;
   position: relative;
-  max-width: min(100% - 30px, 750px);
-}
-@media (min-width: 1200px) {
-  #wp360_invoice_receipt_modal .modal-content {
-    max-width: 1500px;
-  }
 }
 #wp360_invoice_receipt_modal .close {
   font-size: 28px;
@@ -515,10 +420,10 @@
           justify-content: center;
 }
 
-.wp360Invoice_sp_wrapper {
+.woocommerce-MyAccount-content {
   position: relative;
 }
-.wp360Invoice_sp_wrapper .wp360invpdf_loader {
+.woocommerce-MyAccount-content .wp360invpdf_loader {
   background-color: rgba(255, 255, 255, 0.5);
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -532,48 +437,14 @@
   height: 100%;
   display: none;
 }
-.wp360Invoice_sp_wrapper .wp360invpdf_loader.active {
+.woocommerce-MyAccount-content .wp360invpdf_loader.active {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
-.wp360Invoice_sp_wrapper .wp360invpdf_loader .wp360inv_loader {
-  border: 6px solid #e4eaee;
-  border-top: 6px solid #3498db;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  -webkit-animation: wp360_spin_anim 2s linear infinite;
-          animation: wp360_spin_anim 2s linear infinite;
-}
 
-@-webkit-keyframes wp360_spin_anim {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
-@keyframes wp360_spin_anim {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
 .admin-wp360invoice_download {
   display: inline-block;
-}
-
-.wp360Invoice_sp_wrapper {
-  position: relative;
 }
 
 @media print {

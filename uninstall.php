@@ -19,6 +19,7 @@ delete_option('wp360_invoicestartnumber');
 delete_option('wp360_invoice_addresses');
 delete_option('wp360_invoice_banking');
 delete_option('wp360_firm_details');
+delete_option('wp360_invoices_page_id');
 
 $wp360_posts = get_posts(
 	[
