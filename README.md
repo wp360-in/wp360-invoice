@@ -4,8 +4,8 @@ Contributors: wp360
 Donate link: https://wp360.in
 Tags: woocommerce, invoice, custom invoice
 Requires at least: 5.2.0
-Tested up to: 6.3
-Stable tag: 6.1.6
+Tested up to: 6.7.1
+Stable tag: 1.0.3
 Requires PHP: 7.4.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

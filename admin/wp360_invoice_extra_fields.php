@@ -6,9 +6,11 @@
         // Hook to show extra fields in user profile
         add_action('show_user_profile', 'wp360invoice_extra_user_fields', 100);
         add_action('edit_user_profile', 'wp360invoice_extra_user_fields', 100);
+        add_action('user_new_form', 'wp360invoice_extra_user_fields', 100);
         // Hook to save extra fields
         add_action('personal_options_update', 'wp360invoice_save_extra_user_fields');
         add_action('edit_user_profile_update', 'wp360invoice_save_extra_user_fields');
+        add_action('user_register', 'wp360invoice_save_extra_user_fields');
     }
     wp360invoice_extfields_init();
     
@@ -23,7 +25,10 @@
                 <td>
                     <div id="wp360-invoice-fields-container">
                         <?php
-                        $invoice_fields = get_user_meta($user->ID, 'wp360_invoice_user_extra_fields', true);
+                            $invoice_fields = '';
+                            if(!empty($user->ID)){
+                                $invoice_fields = get_user_meta($user->ID, 'wp360_invoice_user_extra_fields', true);
+                            }
                         if (!empty($invoice_fields)) {
                             foreach ($invoice_fields as $field) {
                                 ?>
