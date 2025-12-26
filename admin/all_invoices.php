@@ -18,6 +18,20 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
             $this->_column_headers = array($columns, $hidden, $sortable);
             $this->items = $this->wp360invoice_get_invoices_data();
         }
+
+        function invoiceURL($invoice, $action = 'edit'){
+            $scheme = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) ? 'https' : 'http';
+            $host = sanitize_text_field( $_SERVER['HTTP_HOST'] );
+            $request_uri = esc_url_raw( $_SERVER['REQUEST_URI'] );
+            $current_url = "{$scheme}://{$host}{$request_uri}";
+            $url_components = wp_parse_url( $current_url );
+            $query = isset( $url_components['query'] ) ? $url_components['query'] : '';
+            parse_str( $query, $query_array );
+            $query_array['invoice_id'] = $invoice->ID; 
+            $query_array['action'] = $action; 
+            $new_query_string = http_build_query($query_array);
+            return $new_url = $url_components['scheme'] . '://' . $url_components['host'] . $url_components['path'] . '?' . $new_query_string;     
+        }
         function wp360invoice_get_invoices_data() {
             $data = array();
             $invoicesArg = array(
@@ -29,27 +43,7 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
             }
             $invoices = new WP_Query($invoicesArg);
 
-            //edit url
-            $scheme = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) ? 'https' : 'http';
-            $host = sanitize_text_field( $_SERVER['HTTP_HOST'] );
-            $request_uri = esc_url_raw( $_SERVER['REQUEST_URI'] );
-
-            $current_url = "{$scheme}://{$host}{$request_uri}";
-
-            // Parse the URL into components
-            $url_components = wp_parse_url( $current_url );
-
-            // Get the query part and parse it into an array
-            $query = isset( $url_components['query'] ) ? $url_components['query'] : '';
-            parse_str( $query, $query_array );
-            //edit url
-
             foreach ($invoices->posts as $invoice) {
-                $query_array['invoice_id'] = $invoice->ID; // Add or modify a query parameter
-                $new_query_string = http_build_query($query_array);
-                $new_url = $url_components['scheme'] . '://' . $url_components['host'] . $url_components['path'] . '?' . $new_query_string;     
-
-
                 $user_id = get_post_meta($invoice->ID, 'invoice_user', true);
                 $invoice_address = get_post_meta($invoice->ID, 'invoice_address', true);
                 $invoice_bank = get_post_meta($invoice->ID, 'invoice_bank', true);
@@ -70,10 +64,10 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_type'     => sanitize_text_field(ucfirst(get_post_meta($invoice->ID, 'invoice_type', true))),
                     'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
                     'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
-                    'invoice_download'     => '<a href="#" class="admin-wp360invoice_download button wp-element-button bordered-button" data-invoice-id="'.$invoice->ID.'" data-invoice-name="'.sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)).'">'.__('Download', 'text-domain').'</a>',
+                    'invoice_download'     => '<div style="display: inline-block; text-align:center;"><a href="#" class="admin-wp360invoice_download button wp-element-button bordered-button" data-invoice-id="'.$invoice->ID.'" data-invoice-name="'.sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)).'">'.__('Download', 'text-domain').'</a><br> or <br><a href="'.$this->invoiceURL($invoice,'view').'" class="admin-wp360invoice_view">'.__('View', 'text-domain').'</a></div>',
                 );
                 if (is_admin() && current_user_can('manage_options')) {
-                    $data[count($data) - 1]['actions'] = '<a href="' . esc_url($new_url) . '">' . __('Edit', 'wp360-invoice') . '</a>';
+                    $data[count($data) - 1]['actions'] = '<a href="' . esc_url($this->invoiceURL($invoice, 'edit')) . '">' . __('Edit', 'wp360-invoice') . '</a>';
                 }
             }
             return $data;
@@ -94,7 +88,7 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 'invoice_type'      => esc_html__('Invoice Type', 'wp360-invoice'),
                 'invoice_status'      => esc_html__('Invoice Status', 'wp360-invoice'),
                 'invoice_receipt'      => esc_html__('Receipt', 'wp360-invoice'),
-                'invoice_download'      => esc_html__('Download PDF', 'wp360-invoice'),
+                'invoice_download'      => esc_html__('Download/View PDF', 'wp360-invoice'),
                 // 'actions' => esc_html__('Action', 'wp360-invoice')
             ));
             if (is_admin() && current_user_can('manage_options')) {
@@ -151,7 +145,24 @@ function wp360invoice_display_invoices_list_table() {
     $wp360_invoices_list_table->prepare_items();
     $wp360_invoices_list_table->display();
 }
-
+if(
+    isset($_GET['invoice_id']) && !empty($_GET['invoice_id'])
+            && isset($_GET['action']) && $_GET['action'] === 'view'
+){
+    $invoiceID = sanitize_text_field($_GET['invoice_id']); 
+    require_once dirname(__DIR__) . '/front/view_invoice.php';
+    echo ' 
+    <style>
+        .wp360Invoice_action_buttons, h2, .error{
+            display: none;
+        }
+    </style>
+    <div class="viewInvoicePopup">
+        <div class="viewInvoicePopupContent">
+            '.wp360invoice_showInvoice($invoiceID).' 
+        </div>
+    </div>';
+}
 ?>
 <div class="wrap alignwide">
     <?php 
@@ -160,14 +171,17 @@ function wp360invoice_display_invoices_list_table() {
     }   ?>
     <h1 class="wp-heading-inline"><?php esc_html_e('wp360 invoices', 'wp360-invoice');?></h1>
     <?php 
-        if(isset($_GET['invoice_id']) && !empty($_GET['invoice_id'])):
-            require_once'edit_invoice.php';
+        if(
+            isset($_GET['invoice_id']) && !empty($_GET['invoice_id'])
+            && isset($_GET['action']) && $_GET['action'] === 'edit'
+            ):
+            require_once 'edit_invoice.php';
         else:        
     ?>   
         <?php if (is_admin() && current_user_can('manage_options')) { ?>
             <button onclick="wp360toggleCustomFun('.wp360_invoice_toggleNewInvoice')" class="page-title-action"><?php esc_html_e('Add New Invoice', 'wp360-invoice');?></button>
             <div class="wp360_invoice_toggleNewInvoice" style="display:none;">
-                <?php require_once'add_invoice.php'; ?>
+                <?php require_once 'add_invoice.php'; ?>
             </div>
         <?php } ?>
     

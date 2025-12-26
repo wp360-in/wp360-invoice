@@ -365,3 +365,29 @@
             flex: 100%;
   }
 }
+.viewInvoicePopup {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  z-index: 10000;
+}
+.viewInvoicePopup .viewInvoicePopupContent {
+  background: #fff;
+  padding: 20px;
+  max-width: 90%;
+  max-height: 90%;
+  width: 800px;
+  overflow: auto;
+  position: relative;
+  margin: auto;
+}/*# sourceMappingURL=admin_style.css.map */

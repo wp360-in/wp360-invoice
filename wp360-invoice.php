@@ -71,6 +71,7 @@ add_action('admin_enqueue_scripts', 'wp360invoice_pluginAdminScripts');
 function wp360invoice_pluginAdminScripts() {    
     wp_enqueue_media(); 
     wp_enqueue_style(WP360_SLUG.'_admin_style', plugin_dir_url(__FILE__).'admin/css/admin_style.css', array(), WP360INVOICE_VERSION);
+        wp_enqueue_style(WP360_SLUG.'_front_style', plugin_dir_url(__FILE__).'front/assets/css/front_style.css','',WP360INVOICE_VERSION);
     wp_enqueue_style(WP360_SLUG.'_suite_style', plugin_dir_url(__FILE__).'suite/suite.css', array(), WP360INVOICE_VERSION);
     wp_enqueue_script('jquery', false, array(), true, true); // Load jQuery in the footer
     wp_enqueue_script(WP360_SLUG.'_admin_js', plugin_dir_url(__FILE__).'admin/js/admin_script.js?v='.time().'', array('jquery'), WP360INVOICE_VERSION,true); 
