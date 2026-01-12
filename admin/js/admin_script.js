@@ -7,6 +7,19 @@ function wp360toggleCustomFun(elm){
 }
 jQuery(document).ready(function($) {
 var currentIndex = 0;
+// Find the highest index from existing items
+jQuery('.wp360_invoiceItem input.itemDescField').each(function() {
+    var name = jQuery(this).attr('name');
+    if (name) {
+        var match = name.match(/items\[(\d+)\]/);
+        if (match) {
+            var index = parseInt(match[1]);
+            if (index >= currentIndex) {
+                currentIndex = index;
+            }
+        }
+    }
+});
 function wp360invoice_addNewItem() {
   currentIndex++; // Increment the item index
   var newItem = $('.wp360_invoiceItem:first').clone(); // Clone the first invoiceItem
