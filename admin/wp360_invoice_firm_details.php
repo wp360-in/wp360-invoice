@@ -227,6 +227,16 @@ function wp360invoice_render_firm_details_page() {
             </div>            
         <?php endforeach; ?>
 
+    <!-- OLD BCP TEMPORARY -->
+        <?php
+
+            $saved_invoice_banking = get_option('wp360_invoice_banking', array());
+            echo '<pre>', print_r($saved_invoice_banking , true ); echo '</pre>';
+            $saved_invoice_addresses = get_option('wp360_invoice_addresses', array());
+            echo '<pre>', print_r($saved_invoice_addresses , true ); echo '</pre>';
+        ?>
+ <!-- OLD BCP -->
+
         <div class="add_firm_new">
             <button type="button" class="button add-dynamic-field"><?php esc_html_e('Add Firm Detail', 'wp360-invoice'); ?></button>
         </div>
