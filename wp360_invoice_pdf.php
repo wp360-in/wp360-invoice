@@ -144,9 +144,14 @@
         $invoiceNumber  = esc_html(get_post_meta($invoiceID, 'invoice_number', true));
         $invoiceUserID  = get_post_meta($invoiceID, 'invoice_user', true);
         $invoiceUser = get_userdata($invoiceUserID);
-        $currency = '';
-        if (class_exists('WooCommerce')) {
-            $currency = get_woocommerce_currency_symbol();
+        // $currency = '';
+        // if (class_exists('WooCommerce')) {
+        //     $currency = get_woocommerce_currency_symbol();
+        // }
+
+        $currency = get_post_meta($invoiceID, 'invoice_currency', true) .'&nbsp;';
+        if (empty($currency)) {
+            $currency = get_option('wp360_selected_currency', 'USD') . '&nbsp;';
         }
         $userID         = get_current_user_id();
         $userData       = get_userdata($userID);
@@ -198,7 +203,8 @@
         $invoicetype    = esc_html(get_post_meta($invoiceID, 'invoice_type', true));
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
-        }        
+        }
+        
     ?>    
         <table class="invoice-header">
             <tbody>                        
@@ -243,8 +249,8 @@
             <tr>
                 <td>
                     <?php
-                        $saved_company_address = get_post_meta($invoiceID, 'invoice_address', true);
-                        if($saved_company_address){
+                        if(is_array($invFirm) && isset($invFirm['addresses'][0])){
+                            $saved_company_address =  $invFirm['addresses'][0];
                             echo '<h4>'. __( 'Address','wp360-invoice' ) .'</h4>';
                             echo '<p class="pre_line">'.wp_kses_post($saved_company_address).'</p>';
                         }
@@ -314,8 +320,9 @@
         <table class="invoice_bottom">
             <tr>
             <?php
-                $invoiceBank = get_post_meta($invoiceID, 'invoice_bank', true);
-                if(!empty($invoiceBank)) { ?>
+                if(!empty($invFirm) && isset( $invFirm['bank_details'][0] )) {
+                      $invoiceBank = $invFirm['bank_details'][0];
+                    ?>
                     <td style="padding: 0px; width: 60%; border: 1px solid #ddd;">
                         <table class="bank-detail" style="margin: 0px;">
                             <tr>

@@ -2,7 +2,6 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-
 // Handle form submission
 // add_action('admin_init', 'wp360_invoices_addresses_init');
 function wp360invoice_addresses_init() {
@@ -35,7 +34,7 @@ function wp360invoice_render_address_fields() {
     if (empty($saved_invoice_addresses)) {        
         $saved_invoice_addresses[] = '';
     } ?>        
-        <fieldset id="wp360-invoice-address-fields">
+        <fieldset id="wp360-invoice-address-fields" style="display:none;">
             <h3><?php esc_html_e('Addresses', 'wp360-invoice'); ?></h3>
             <div style="display:none;" class="dynamic-field-template">
                 <div class="removeWrapper"><?php esc_html_e('Add Detail:', 'wp360-invoice'); ?>

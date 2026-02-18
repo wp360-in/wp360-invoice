@@ -36,7 +36,7 @@ function wp360invoice_render_banking_page() {
         $saved_invoice_banking[] = '';
     }
     ?>
-    <fieldset id="wp360-invoice-banking-table">
+    <!-- <fieldset id="wp360-invoice-banking-table" style="display:none;">
         <h3><?php esc_html_e('Banking Details', 'wp360-invoice'); ?></h3>
         <div style="display:none;" class="dynamic-field-template">
             <div class="removeWrapper"><?php esc_html_e('Add Detail:', 'wp360-invoice'); ?> 
@@ -52,7 +52,7 @@ function wp360invoice_render_banking_page() {
             </div>
         <?php endforeach; ?>
         <div><button type="button" class="button add-dynamic-field"><?php esc_html_e('Add Banking Detail', 'wp360-invoice'); ?></button></div>
-    </fieldset>
+    </fieldset> -->
     <?php
 }
 ?>
