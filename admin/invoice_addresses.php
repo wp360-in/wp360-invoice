@@ -2,6 +2,7 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
 // Handle form submission
 // add_action('admin_init', 'wp360_invoices_addresses_init');
 function wp360invoice_addresses_init() {

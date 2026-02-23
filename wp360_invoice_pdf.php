@@ -205,6 +205,16 @@
             $invoicetype = 'Items';
         }
         
+        // $saved_invoice_firm  = get_option('wp360_firm_details', array());
+        // $invFirm             = get_post_meta($invoiceID, 'invoice_firm', true);
+        // if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+        //     foreach ($saved_invoice_firm as $firm) {
+        //         if (!empty($invFirm) && isset($firm['id']) && ($firm['id'] == $invFirm['id'])) {
+        //             $invFirm = $firm;
+        //             break;
+        //         }
+        //     }
+        // }
     ?>    
         <table class="invoice-header">
             <tbody>                        
@@ -320,6 +330,10 @@
         <table class="invoice_bottom">
             <tr>
             <?php
+
+          
+
+                
                 if(!empty($invFirm) && isset( $invFirm['bank_details'][0] )) {
                       $invoiceBank = $invFirm['bank_details'][0];
                     ?>

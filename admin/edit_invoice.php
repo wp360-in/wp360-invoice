@@ -104,6 +104,7 @@ $currency_options  = array_filter(array_map('trim', explode("\n", $currency_list
             <input type="text" name="invoice_title" value="<?php echo esc_attr(get_the_title($invoiceID)); ?>" required placeholder="<?php esc_attr_e('Invoice Title', 'wp360-invoice'); ?>" class="textFieldStyle">
         </div>
 
+
         <div class="invoiceFormInn">
             <select name="invoice_user" class="selectFieldStyle halfWidth" required>
                 <option value=""><?php esc_html_e('Select user', 'wp360-invoice'); ?></option>
@@ -121,57 +122,12 @@ $currency_options  = array_filter(array_map('trim', explode("\n", $currency_list
                     }
                 ?>
             </select>
-            <input type="number" name="invoice_amount" value="<?php echo esc_attr($invoiceAmount);?>" required placeholder="<?php esc_attr_e('Invoice Total Amount', 'wp360-invoice'); ?>" id="totalAmountField" readonly class="textFieldStyle disableField halfWidth">
-        </div>
-
-        <div class="invoiceFormInn radioButtonCon">
-            <h3><?php esc_html_e('Invoice Type', 'wp360-invoice'); ?></h3>
-            <div class="radioButtons">
-                <label>
-                    <input type="radio" name="invoice_type" value="hourly" <?php if($invoiceType == 'hourly'){ echo 'checked';}?> required>
-                    <?php esc_html_e('Hourly', 'wp360-invoice'); ?>
-                </label>
-                <label>
-                    <input type="radio" name="invoice_type" value="fixed" <?php if($invoiceType == 'fixed'){ echo 'checked';}?>>
-                    <?php esc_html_e('Fixed', 'wp360-invoice'); ?>
-                </label>
-            </div>
-        </div>
-
-        <!-- Currency selector (per invoice) -->
-        <div class="invoiceFormInn">
-            <div class="selectWrapper fullWidth">
-                <h3><?php esc_html_e('Currency', 'wp360-invoice'); ?></h3>
-                <?php if (!empty($currency_options)) : ?>
-                    <select name="invoice_currency" id="invoice_currency" class="selectFieldStyle halfWidth" required>
-                        <?php foreach ($currency_options as $cur) : ?>
-                            <option value="<?php echo esc_attr($cur); ?>" <?php selected($cur, $invoiceCurrency); ?>>
-                                <?php echo esc_html($cur); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <small style="display:block; margin-top:4px;">
-                        <?php esc_html_e('To add more currencies, go to', 'wp360-invoice'); ?>
-                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>"><?php esc_html_e('Settings', 'wp360-invoice'); ?></a>.
-                    </small>
-                <?php else : ?>
-                    <p class="description">
-                        <?php esc_html_e('No currencies configured. Please add currencies in', 'wp360-invoice'); ?>
-                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>"><?php esc_html_e('Settings', 'wp360-invoice'); ?></a>.
-                    </p>
-                    <input type="hidden" name="invoice_currency" value="<?php echo esc_attr($invoiceCurrency); ?>">
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <div class="invoiceFormInn">
-            <div class="selectWrapper fullWidth">
-                <h3><?php esc_html_e('Firm/ Business', 'wp360-invoice'); ?></h3>
+            <div class="selectWrapper halfWidth">
                 <?php
                     $saved_invoice_firm = get_option('wp360_firm_details', array());
                     if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
                         echo '<select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>
-                        <option value="">' . esc_html__("Select firm details", "wp360-invoice") . '</option>';
+                        <option value="">' . esc_html__("Select Receipt", "wp360-invoice") . '</option>';
                         foreach ($saved_invoice_firm as $index => $firm) {
                             $selected = (!empty($invoiceFirm) && $firm['id'] == $invoiceFirm['id']) ? 'selected' : '';
                             echo '<option value="' . esc_attr($firm['firm_name']) . '" ' . esc_attr($selected)
@@ -192,13 +148,62 @@ $currency_options  = array_filter(array_map('trim', explode("\n", $currency_list
                 <input type="hidden" name="wp360_invoice_firm_logo"      id="firm_logo"      value="<?php echo esc_attr(!empty($invoiceFirm['logo_url']) ? $invoiceFirm['logo_url'] : ''); ?>">
                 <input type="hidden" name="wp360_invoice_firm_tagline"   id="firm_tagline"   value="<?php echo esc_attr(!empty($invoiceFirm['tagline'])  ? $invoiceFirm['tagline']  : ''); ?>">
                 <input type="hidden" name="wp360_invoice_firm_text_logo" id="firm_text_logo" value="<?php echo esc_attr(!empty($invoiceFirm['text_logo'])? $invoiceFirm['text_logo']: ''); ?>">
-                <div class="wp360_invoice_addInvoiceDetails">
+                <div class="wp360_invoice_addInvoiceDetails" style="display:none;">
                     <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link">
                         <?php esc_html_e('Add Firm Details', 'wp360-invoice'); ?>
                     </a>
                 </div>
             </div>
         </div>
+
+       
+
+        <div class="invoiceFormInn radioButtonCon">
+            <h3><?php esc_html_e('Invoice Type', 'wp360-invoice'); ?></h3>
+            <div class="radioButtons">
+                <label>
+                    <input type="radio" name="invoice_type" value="hourly" <?php if($invoiceType == 'hourly'){ echo 'checked';}?> required>
+                    <?php esc_html_e('Hourly', 'wp360-invoice'); ?>
+                </label>
+                <label>
+                    <input type="radio" name="invoice_type" value="fixed" <?php if($invoiceType == 'fixed'){ echo 'checked';}?>>
+                    <?php esc_html_e('Fixed', 'wp360-invoice'); ?>
+                </label>
+            </div>
+        </div>
+
+        <!-- Currency selector (per invoice) -->
+        <div class="invoiceFormInn">
+            <div class="selectWrapper halfWidth">
+                <h3><?php esc_html_e('Currency', 'wp360-invoice'); ?></h3>
+                <?php if (!empty($currency_options)) : ?>
+                    <select name="invoice_currency" id="invoice_currency" class="selectFieldStyle fullWidth" required>
+                        <?php foreach ($currency_options as $cur) : ?>
+                            <option value="<?php echo esc_attr($cur); ?>" <?php selected($cur, $invoiceCurrency); ?>>
+                                <?php echo esc_html($cur); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <small style="display:block; margin-top:4px;">
+                        <?php esc_html_e('To add more currencies, go to', 'wp360-invoice'); ?>
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>"><?php esc_html_e('Settings', 'wp360-invoice'); ?></a>.
+                    </small>
+                <?php else : ?>
+                    <p class="description">
+                        <?php esc_html_e('No currencies configured. Please add currencies in', 'wp360-invoice'); ?>
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>"><?php esc_html_e('Settings', 'wp360-invoice'); ?></a>.
+                    </p>
+                    <input type="hidden" name="invoice_currency" value="<?php echo esc_attr($invoiceCurrency); ?>">
+                <?php endif; ?>
+            </div>
+            <div class="selectWrapper halfWidth">
+                <h3><?php esc_html_e('Total', 'wp360-invoice'); ?></h3>
+                <input type="number" name="invoice_amount" value="<?php echo esc_attr($invoiceAmount);?>" required placeholder="<?php esc_attr_e('Invoice Total Amount', 'wp360-invoice'); ?>" id="totalAmountField" readonly class="textFieldStyle disableField fullWidth">
+            </div>
+
+        </div>
+
+
 
         <div class="invoiceFormInn wp360_invoice_itemsCon">
             <?php foreach($invoiceItems as $key => $item) { ?>

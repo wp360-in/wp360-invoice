@@ -81,7 +81,7 @@ $default_currency   = get_option('wp360_selected_currency', 'USD');
         </div>
         <div class="invoiceFormInn">
             <select name="invoice_user" id="" class="selectFieldStyle halfWidth" required>
-                <option value=""><?php esc_html_e('Select user', 'wp360-invoice'); ?></option>
+                <option value=""><?php esc_html_e('Select Customer', 'wp360-invoice'); ?></option>
                 <?php
                     $customers = wp360invoice_wooCustomersList();
                     if ($customers && is_array($customers) && !empty($customers)) {
@@ -94,7 +94,29 @@ $default_currency   = get_option('wp360_selected_currency', 'USD');
                     }
                 ?>
             </select>
-            <input type="number" name="invoice_amount" required placeholder="<?php esc_attr_e('Invoice Total Amount', 'wp360-invoice'); ?>" id="totalAmountField" readonly class="textFieldStyle disableField halfWidth">
+            <div class="selectWrapper halfWidth">
+                <select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>                
+                <?php
+                    $saved_invoice_firm = get_option('wp360_firm_details', array());
+                    if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+                        echo '<option value="">' . esc_html__("Bill To", "wp360-invoice") . '</option>';
+                        foreach ($saved_invoice_firm as $index => $firm) {
+                            echo '<option value="'.wp_kses($firm['firm_name'], $allowed_html).'"'. ' data-logo="'. esc_attr($firm['logo_url']) .'" data-firm-id="'. esc_attr($firm['id']) .'" data-tagline="'. esc_attr($firm['tagline']) .'" data-text-logo="'. esc_attr($firm['text_logo']) .'">'.esc_html($firm['firm_name']).'</option>';
+                        }
+                    }
+                    else{
+                        echo '<option value="">' . esc_html__("No details availble.", "wp360-invoice") . '</option>';
+                    }
+                ?>
+                </select>
+                <input type="hidden" name="wp360_invoice_firm_id" id="firm_id" value="">
+                <input type="hidden" name="wp360_invoice_firm_logo" id="firm_logo" value="">
+                <input type="hidden" name="wp360_invoice_firm_tagline" id="firm_tagline" value="">
+                <input type="hidden" name="wp360_invoice_firm_text_logo" id="firm_text_logo" value="">
+                <!-- <div class="wp360_invoice_addInvoiceDetails">
+                    <a href="<?php //echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link"><?php //esc_html_e('Add Firm Details', 'wp360-invoice'); ?></a>                
+                </div> -->
+            </div>
         </div>
         <div class="invoiceFormInn radioButtonCon">
             <h3><?php esc_html_e('Invoice Type', 'wp360-invoice'); ?></h3>
@@ -109,38 +131,13 @@ $default_currency   = get_option('wp360_selected_currency', 'USD');
                 </label>
             </div>
         </div>
-        <div class="invoiceFormInn">
-            <div class="selectWrapper fullWidth">
-                <h3><?php esc_html_e('Firm/ Business', 'wp360-invoice'); ?></h3>
-                <select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>                
-                <?php
-                    $saved_invoice_firm = get_option('wp360_firm_details', array());
-                    if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
-                        echo '<option value="">' . esc_html__("Select firm details", "wp360-invoice") . '</option>';
-                        foreach ($saved_invoice_firm as $index => $firm) {
-                            echo '<option value="'.wp_kses($firm['firm_name'], $allowed_html).'"'. ' data-logo="'. esc_attr($firm['logo_url']) .'" data-firm-id="'. esc_attr($firm['id']) .'" data-tagline="'. esc_attr($firm['tagline']) .'" data-text-logo="'. esc_attr($firm['text_logo']) .'">'.esc_html($firm['firm_name']).'</option>';
-                        }
-                    }
-                    else{
-                        echo '<option value="">' . esc_html__("No firm/business details availble.", "wp360-invoice") . '</option>';
-                    }
-                ?>
-                </select>
-                <input type="hidden" name="wp360_invoice_firm_id" id="firm_id" value="">
-                <input type="hidden" name="wp360_invoice_firm_logo" id="firm_logo" value="">
-                <input type="hidden" name="wp360_invoice_firm_tagline" id="firm_tagline" value="">
-                <input type="hidden" name="wp360_invoice_firm_text_logo" id="firm_text_logo" value="">
-                <div class="wp360_invoice_addInvoiceDetails">
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link"><?php esc_html_e('Add Firm Details', 'wp360-invoice'); ?></a>                
-                </div>
-            </div>
-        </div>
+
         <!-- Currency Start -->
        <div class="invoiceFormInn">
-            <div class="selectWrapper fullWidth">
+            <div class="selectWrapper halfWidth">
                 <h3><?php esc_html_e('Currency', 'wp360-invoice'); ?></h3>
                 <?php if (!empty($currency_options)) : ?>
-                    <select name="invoice_currency" id="invoice_currency" class="selectFieldStyle halfWidth" required>
+                    <select name="invoice_currency" id="invoice_currency" class="selectFieldStyle fullWidth" required>
                         <?php foreach ($currency_options as $cur) : ?>
                             <option value="<?php echo esc_attr($cur); ?>" <?php selected($cur, $default_currency); ?>>
                                 <?php echo esc_html($cur); ?>
@@ -150,6 +147,10 @@ $default_currency   = get_option('wp360_selected_currency', 'USD');
                 <?php else : ?>
                     <input type="hidden" name="invoice_currency" value="<?php echo esc_attr($default_currency); ?>">
                 <?php endif; ?>
+            </div>
+            <div class="selectWrapper halfWidth">
+                <h3><?php esc_html_e('Total', 'wp360-invoice'); ?></h3>
+                <input type="number" width="100%"  name="invoice_amount" required placeholder="<?php esc_attr_e('Invoice Total Amount', 'wp360-invoice'); ?>" id="totalAmountField" readonly class="textFieldStyle disableField">
             </div>
         </div>
         <!-- Currency End -->
