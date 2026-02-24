@@ -10,12 +10,12 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
     $invoiceTitle   = isset($_POST['invoice_title']) ? sanitize_text_field($_POST['invoice_title']) : "";
     $invoiceAmount  = isset($_POST['invoice_amount'])? sanitize_text_field($_POST['invoice_amount']) : "";
     $invoiceUser    = isset($_POST['invoice_user']) ? sanitize_text_field($_POST['invoice_user']) : "";
-    $invoiceAddress = isset($_POST['invoice_address']) ? wp_kses($_POST['invoice_address'], $allowed_html) : "";
-    $invoiceBank    = isset($_POST['invoice_bank']) ? wp_kses($_POST['invoice_bank'], $allowed_html) : "";
+    // $invoiceAddress = isset($_POST['invoice_address']) ? wp_kses($_POST['invoice_address'], $allowed_html) : "";
+    // $invoiceBank    = isset($_POST['invoice_bank']) ? wp_kses($_POST['invoice_bank'], $allowed_html) : "";
     $invoiceCurrency = isset($_POST['invoice_currency']) ? sanitize_text_field($_POST['invoice_currency']) : get_option('wp360_selected_currency', 'USD');
 
     $invoiceFirm = array();
-
+    $saved_invoice_firm  = get_option('wp360_firm_details', array());
     if (isset($_POST['wp360_invoice_firm'])) {
         $invoiceFirm['id'] = sanitize_text_field($_POST['wp360_invoice_firm_id']);
         $invoiceFirm['name'] = sanitize_text_field($_POST['wp360_invoice_firm']);
@@ -23,6 +23,19 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
         
         $invoiceFirm['logo_url'] = isset($_POST['wp360_invoice_firm_logo']) ? esc_url($_POST['wp360_invoice_firm_logo']) : '';
         $invoiceFirm['text_logo'] = isset($_POST['wp360_invoice_firm_text_logo']) ? sanitize_text_field($_POST['wp360_invoice_firm_text_logo']) : '';
+   
+        if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+            foreach ($saved_invoice_firm as $firm) {
+                if (!empty($invoiceFirm) && isset($firm['id']) && ($firm['id'] == $invoiceFirm['id'] )) {
+                    $invFirm = $firm;
+                    $invoiceAddress = isset($invFirm['addresses'][0]) ? $invFirm['addresses'][0]: "";
+                    $invoiceBank    = isset($invFirm['bank_details'][0])  ? $invFirm['bank_details'][0] : "";
+                    break;
+                }
+            }
+        }
+
+
     }
 
     if ( isset( $_POST['items'] ) && is_array( $_POST['items'] ) ) {

@@ -17,8 +17,7 @@ if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &&
     $invoiceTitle   = isset($_POST['invoice_title']) ? sanitize_text_field($_POST['invoice_title']) : "";
     $invoiceAmount  = isset($_POST['invoice_amount'])? sanitize_text_field($_POST['invoice_amount']) : "";
     $invoiceUser    = isset($_POST['invoice_user'])  ? sanitize_text_field($_POST['invoice_user']) : "";
-    $invoiceAddress = isset($_POST['invoice_address'])  ? wp_kses($_POST['invoice_address'], $allowed_html) : "";
-    $invoiceBank    = isset($_POST['invoice_bank'])  ? wp_kses($_POST['invoice_bank'], $allowed_html) : "";
+
 
     // Per-invoice currency
     $invoiceCurrency = isset($_POST['invoice_currency']) ? sanitize_text_field($_POST['invoice_currency']) : get_option('wp360_selected_currency', 'USD');
@@ -33,13 +32,27 @@ if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &&
         }, $_POST['items'] );
     }
     $invoiceFirm = array();
-
+    
+    $saved_invoice_firm  = get_option('wp360_firm_details', array());
     if (isset($_POST['wp360_invoice_firm'])) {
         $invoiceFirm['id']       = sanitize_text_field($_POST['wp360_invoice_firm_id']);
         $invoiceFirm['name']     = sanitize_text_field($_POST['wp360_invoice_firm']);
         $invoiceFirm['tagline']  = isset($_POST['wp360_invoice_firm_tagline']) ? sanitize_text_field($_POST['wp360_invoice_firm_tagline']) : '';
         $invoiceFirm['logo_url'] = isset($_POST['wp360_invoice_firm_logo']) ? esc_url($_POST['wp360_invoice_firm_logo']) : '';
         $invoiceFirm['text_logo']= isset($_POST['wp360_invoice_firm_text_logo']) ? sanitize_text_field($_POST['wp360_invoice_firm_text_logo']) : '';
+
+       
+        if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+            foreach ($saved_invoice_firm as $firm) {
+                if (!empty($invoiceFirm) && isset($firm['id']) && ($firm['id'] == $invoiceFirm['id'] )) {
+                    $invFirm = $firm;
+                    $invoiceAddress = isset($invFirm['addresses'][0]) ? $invFirm['addresses'][0]: "";
+                    $invoiceBank    = isset($invFirm['bank_details'][0])  ? $invFirm['bank_details'][0] : "";
+                    break;
+                }
+            }
+        }
+
     }
 
     $invoiceType = isset($_POST['invoice_type']) ? sanitize_text_field($_POST['invoice_type']) : "";
@@ -74,14 +87,15 @@ if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &&
     } elseif (isset($_POST['_wpnonce_add_invoice'])) {
         echo '<div class="error"><p>' . esc_html__('Security check failed.', 'wp360-invoice') . '</p></div>';
     }
+
 }
+
 
 $invoiceItems    = get_post_meta($invoiceID, 'invoice_items', true);
 $invoiceType     = get_post_meta($invoiceID, 'invoice_type', true);
 $invoiceUser     = get_post_meta($invoiceID, 'invoice_user', true);
 $invoiceAmount   = get_post_meta($invoiceID, 'invoice_amount', true);
-$invoiceAddress  = get_post_meta($invoiceID, 'invoice_address', true);
-$invoiceBank     = get_post_meta($invoiceID, 'invoice_bank', true);
+
 $invoiceFirm     = get_post_meta($invoiceID, 'invoice_firm', true);
 
 // Currency: per-invoice meta → global default → 'USD'
@@ -127,7 +141,7 @@ $currency_options  = array_filter(array_map('trim', explode("\n", $currency_list
                     $saved_invoice_firm = get_option('wp360_firm_details', array());
                     if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
                         echo '<select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>
-                        <option value="">' . esc_html__("Select Receipt", "wp360-invoice") . '</option>';
+                        <option value="">' . esc_html__("Bill To", "wp360-invoice") . '</option>';
                         foreach ($saved_invoice_firm as $index => $firm) {
                             $selected = (!empty($invoiceFirm) && $firm['id'] == $invoiceFirm['id']) ? 'selected' : '';
                             echo '<option value="' . esc_attr($firm['firm_name']) . '" ' . esc_attr($selected)
@@ -140,7 +154,7 @@ $currency_options  = array_filter(array_map('trim', explode("\n", $currency_list
                         echo '</select>';
                     } else {
                         echo '<select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth">
-                            <option value="">' . esc_html__("No firm/business details available.", "wp360-invoice") . '</option>
+                                <option value="">' . esc_html__("No firm/business details available.", "wp360-invoice") . '</option>
                             </select>';
                     }
                 ?>

@@ -51,16 +51,10 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 $invoiceStatus = get_post_meta($invoice->ID, 'invoice_status', true);
                 $invoiceReceipt = get_post_meta($invoice->ID, 'payment_receipt', true);
                 $invFirm             = get_post_meta($invoice->ID, 'invoice_firm', true);
-                if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
-                    foreach ($saved_invoice_firm as $firm) {
-                        if (!empty($invFirm) && isset($firm['id']) && ($firm['id'] == $invFirm['id'])) {
-                           
-                            $invFirm = $firm;
-                            $invoice_address =  $invFirm['addresses'][0];
-                            $invoice_bank    =  $invFirm['bank_details'][0];
-                        }
-                    }
-                }
+
+                $invoiceAddress  = get_post_meta($invoice->ID, 'invoice_address', true);
+                $invoiceBank     = get_post_meta($invoice->ID, 'invoice_bank', true);
+            
                 $data[] = array(
                     'ID'               => $invoice->ID,
                     'invoice_number'   => sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)),
@@ -68,8 +62,8 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_title'    => $invoice->post_title,
                     'invoice_firm'    => !empty($invoice_firm) ? $invoice_firm['name'] : 'N/A',
                     'invoice_amount'   => $invoice_amount,
-                    'invoice_address'   => $invoice_address,
-                    'invoice_bank'   => !empty($invoice_bank) ? $invoice_bank : 'N/A' ,
+                    'invoice_address'   => $invoiceAddress,
+                    'invoice_bank'   => !empty($invoiceBank) ? $invoiceBank : 'N/A' ,
                     'invoice_type'     => sanitize_text_field(ucfirst(get_post_meta($invoice->ID, 'invoice_type', true))),
                     'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
                     'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',

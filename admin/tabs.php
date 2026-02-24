@@ -12,9 +12,7 @@ function wp360invoice_admin_tabs(){
             'tab'   => 'settings'
         ],
     ];
-
     $res = '<div class="wp360_invoice_admin_tabs"><ul>';
-
     foreach($items as $item){
         $active = '';
 

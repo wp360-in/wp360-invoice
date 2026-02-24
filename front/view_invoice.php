@@ -103,6 +103,10 @@ function wp360invoice_showInvoice($invoiceID){
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
         }
+
+        $invoiceAddress  = get_post_meta($invoiceID, 'invoice_address', true);
+        $invoiceBank     = get_post_meta($invoiceID, 'invoice_bank', true);
+
     ?>         
         <div class="wp360Invoice_sp_wrapper">
             <div class="wp360invpdf_loader"><span class="wp360inv_loader"></span></div>
@@ -145,7 +149,7 @@ function wp360invoice_showInvoice($invoiceID){
                         <input type="file" id="paymentReceipt" name="paymentReceipt" accept=".pdf, .jpg, .jpeg" required>
                         <input type="hidden" id="invoiceID" name="invoiceID" value="<?php echo $invoiceID; ?>">
                         <button type="submit" class="siteBtn"><?php _e('Submit', 'text-domain'); ?></button>
-                        <button type="button" class="closeReceiptModal""><?php _e('Cancel', 'text-domain'); ?></button>
+                        <button type="button" class="closeReceiptModal"><?php _e('Cancel', 'text-domain'); ?></button>
                     </form>
                 </div>
             </div>        
@@ -188,10 +192,9 @@ function wp360invoice_showInvoice($invoiceID){
                 <div class="invoceHead2">
                     <div class="companyInfo">
                         <?php
-                            if(!empty($invFirm) && isset( $invFirm['addresses'][0] )){ 
-                                $saved_company_address =  $invFirm['addresses'][0];
+                            if(!empty($invoiceAddress)){
                                 echo '<h4>'. esc_html__( 'Address','wp360-invoice' ) .'</h4>';
-                                echo '<p class="pre_line">'.wp_kses_post($saved_company_address).'</p>';
+                                echo '<p class="pre_line">'.wp_kses_post($invoiceAddress).'</p>';
                             }
                         ?>                    
                         <!-- <p>
@@ -263,22 +266,13 @@ function wp360invoice_showInvoice($invoiceID){
                     </table>
                 </div>
                 <div class="invoiceFooter">
-
-                
-                    <?php 
-                      // echo '<pre>', print_r($invFirm['addresses'][0] , true); echo '</pre>';
-
-                     
-                        if(!empty($invFirm) && isset( $invFirm['bank_details'][0] )){ 
-                            $invoiceBank = $invFirm['bank_details'][0];
-                            ?>
-
-                            <div class="bankDetail">
-                                <h3><?php echo esc_html__('Bank Details', 'text-domain'); ?></h3>
-                                <?php echo '<div class="pre_line">' . wp_kses_post($invoiceBank) . '</div>'; ?>
-                            </div>
-                        <?php }                
-                    ?>                 
+                    <?php if(!empty($invoiceBank)){?>
+                        <div class="bankDetail">
+                            <h3><?php echo esc_html__('Bank Details', 'text-domain'); ?></h3>
+                            <?php echo '<div class="pre_line">' . wp_kses_post($invoiceBank) . '</div>'; ?>
+                        </div>
+                    <?php } ?>
+                                 
                     <div class="infoTotalCon">
                         <div class="totalInn1">
                             <strong><?php esc_html_e('Subtotal', 'wp360-invoice');?></strong>

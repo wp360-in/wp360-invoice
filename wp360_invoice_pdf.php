@@ -204,17 +204,8 @@
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
         }
-        
-        // $saved_invoice_firm  = get_option('wp360_firm_details', array());
-        // $invFirm             = get_post_meta($invoiceID, 'invoice_firm', true);
-        // if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
-        //     foreach ($saved_invoice_firm as $firm) {
-        //         if (!empty($invFirm) && isset($firm['id']) && ($firm['id'] == $invFirm['id'])) {
-        //             $invFirm = $firm;
-        //             break;
-        //         }
-        //     }
-        // }
+        $invoiceAddress  = get_post_meta($invoiceID, 'invoice_address', true);
+        $invoiceBank     = get_post_meta($invoiceID, 'invoice_bank', true);
     ?>    
         <table class="invoice-header">
             <tbody>                        
@@ -259,10 +250,9 @@
             <tr>
                 <td>
                     <?php
-                        if(is_array($invFirm) && isset($invFirm['addresses'][0])){
-                            $saved_company_address =  $invFirm['addresses'][0];
+                        if(!empty($invoiceAddress)){
                             echo '<h4>'. __( 'Address','wp360-invoice' ) .'</h4>';
-                            echo '<p class="pre_line">'.wp_kses_post($saved_company_address).'</p>';
+                            echo '<p class="pre_line">'.wp_kses_post($invoiceAddress).'</p>';
                         }
                     ?>
                 </td>
@@ -334,8 +324,7 @@
           
 
                 
-                if(!empty($invFirm) && isset( $invFirm['bank_details'][0] )) {
-                      $invoiceBank = $invFirm['bank_details'][0];
+                if(!empty($invoiceBank)) {
                     ?>
                     <td style="padding: 0px; width: 60%; border: 1px solid #ddd;">
                         <table class="bank-detail" style="margin: 0px;">
