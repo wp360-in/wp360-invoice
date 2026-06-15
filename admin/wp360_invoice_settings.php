@@ -4,7 +4,7 @@
     }
 
     require_once 'invoice_addresses.php';
-    require_once 'invoice_bank_details.php';
+   // require_once 'invoice_bank_details.php';
     require_once 'wp360_misc_settings.php';
     require_once 'wp360_invoice_firm_details.php';
 
@@ -24,7 +24,7 @@
 
                         wp360invoice_render_firm_details_page();
                         wp360invoice_render_address_fields();
-                        wp360invoice_render_banking_page();
+                        //wp360invoice_render_banking_page();
                         wp360invoice_render_misc_settings();
                     ?>
                     <div class="wp360_submit_wrapper">

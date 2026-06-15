@@ -144,9 +144,14 @@
         $invoiceNumber  = esc_html(get_post_meta($invoiceID, 'invoice_number', true));
         $invoiceUserID  = get_post_meta($invoiceID, 'invoice_user', true);
         $invoiceUser = get_userdata($invoiceUserID);
-        $currency = '';
-        if (class_exists('WooCommerce')) {
-            $currency = get_woocommerce_currency_symbol();
+        // $currency = '';
+        // if (class_exists('WooCommerce')) {
+        //     $currency = get_woocommerce_currency_symbol();
+        // }
+
+        $currency = get_post_meta($invoiceID, 'invoice_currency', true) .'&nbsp;';
+        if (empty($currency)) {
+            $currency = get_option('wp360_selected_currency', 'USD') . '&nbsp;';
         }
         $userID         = get_current_user_id();
         $userData       = get_userdata($userID);
@@ -198,7 +203,9 @@
         $invoicetype    = esc_html(get_post_meta($invoiceID, 'invoice_type', true));
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
-        }        
+        }
+        $invoiceAddress  = get_post_meta($invoiceID, 'invoice_address', true);
+        $invoiceBank     = get_post_meta($invoiceID, 'invoice_bank', true);
     ?>    
         <table class="invoice-header">
             <tbody>                        
@@ -243,10 +250,9 @@
             <tr>
                 <td>
                     <?php
-                        $saved_company_address = get_post_meta($invoiceID, 'invoice_address', true);
-                        if($saved_company_address){
+                        if(!empty($invoiceAddress)){
                             echo '<h4>'. __( 'Address','wp360-invoice' ) .'</h4>';
-                            echo '<p class="pre_line">'.wp_kses_post($saved_company_address).'</p>';
+                            echo '<p class="pre_line">'.wp_kses_post($invoiceAddress).'</p>';
                         }
                     ?>
                 </td>
@@ -314,8 +320,12 @@
         <table class="invoice_bottom">
             <tr>
             <?php
-                $invoiceBank = get_post_meta($invoiceID, 'invoice_bank', true);
-                if(!empty($invoiceBank)) { ?>
+
+          
+
+                
+                if(!empty($invoiceBank)) {
+                    ?>
                     <td style="padding: 0px; width: 60%; border: 1px solid #ddd;">
                         <table class="bank-detail" style="margin: 0px;">
                             <tr>

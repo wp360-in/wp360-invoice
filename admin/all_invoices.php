@@ -42,16 +42,19 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 $invoicesArg['orderby'] = sanitize_text_field($_GET['orderby']);
             }
             $invoices = new WP_Query($invoicesArg);
-
+            $saved_invoice_firm = get_option('wp360_firm_details', array());
             foreach ($invoices->posts as $invoice) {
                 $user_id = get_post_meta($invoice->ID, 'invoice_user', true);
-                $invoice_address = get_post_meta($invoice->ID, 'invoice_address', true);
-                $invoice_bank = get_post_meta($invoice->ID, 'invoice_bank', true);
                 $invoice_firm = get_post_meta($invoice->ID, 'invoice_firm', true);
                 $user_info = get_userdata($user_id);
                 $invoice_amount = floatval(get_post_meta($invoice->ID, 'invoice_amount', true));
                 $invoiceStatus = get_post_meta($invoice->ID, 'invoice_status', true);
                 $invoiceReceipt = get_post_meta($invoice->ID, 'payment_receipt', true);
+                $invFirm             = get_post_meta($invoice->ID, 'invoice_firm', true);
+
+                $invoiceAddress  = get_post_meta($invoice->ID, 'invoice_address', true);
+                $invoiceBank     = get_post_meta($invoice->ID, 'invoice_bank', true);
+            
                 $data[] = array(
                     'ID'               => $invoice->ID,
                     'invoice_number'   => sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)),
@@ -59,8 +62,8 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_title'    => $invoice->post_title,
                     'invoice_firm'    => !empty($invoice_firm) ? $invoice_firm['name'] : 'N/A',
                     'invoice_amount'   => $invoice_amount,
-                    'invoice_address'   => $invoice_address,
-                    'invoice_bank'   => !empty($invoice_bank) ? $invoice_bank : 'N/A' ,
+                    'invoice_address'   => $invoiceAddress,
+                    'invoice_bank'   => !empty($invoiceBank) ? $invoiceBank : 'N/A' ,
                     'invoice_type'     => sanitize_text_field(ucfirst(get_post_meta($invoice->ID, 'invoice_type', true))),
                     'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
                     'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
@@ -81,7 +84,7 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 'invoice_number'    => esc_html__('Invoice Number', 'wp360-invoice'),
                 'user'              => esc_html__('User', 'wp360-invoice'),
                 'invoice_title'     => esc_html__('Invoice Title', 'wp360-invoice'),
-                'invoice_firm'     => esc_html__('Firm/Business', 'wp360-invoice'),
+                'invoice_firm'     => esc_html__('Bill To', 'wp360-invoice'),
                 'invoice_amount'    => esc_html__('Amount', 'wp360-invoice'),
                 'invoice_address'    => esc_html__('Address', 'wp360-invoice'),
                 'invoice_bank'    => esc_html__('Bank Details', 'wp360-invoice'),

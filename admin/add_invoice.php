@@ -10,10 +10,12 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
     $invoiceTitle   = isset($_POST['invoice_title']) ? sanitize_text_field($_POST['invoice_title']) : "";
     $invoiceAmount  = isset($_POST['invoice_amount'])? sanitize_text_field($_POST['invoice_amount']) : "";
     $invoiceUser    = isset($_POST['invoice_user']) ? sanitize_text_field($_POST['invoice_user']) : "";
-    $invoiceAddress = isset($_POST['invoice_address']) ? wp_kses($_POST['invoice_address'], $allowed_html) : "";
-    $invoiceBank    = isset($_POST['invoice_bank']) ? wp_kses($_POST['invoice_bank'], $allowed_html) : "";
-    $invoiceFirm = array();
+    // $invoiceAddress = isset($_POST['invoice_address']) ? wp_kses($_POST['invoice_address'], $allowed_html) : "";
+    // $invoiceBank    = isset($_POST['invoice_bank']) ? wp_kses($_POST['invoice_bank'], $allowed_html) : "";
+    $invoiceCurrency = isset($_POST['invoice_currency']) ? sanitize_text_field($_POST['invoice_currency']) : get_option('wp360_selected_currency', 'USD');
 
+    $invoiceFirm = array();
+    $saved_invoice_firm  = get_option('wp360_firm_details', array());
     if (isset($_POST['wp360_invoice_firm'])) {
         $invoiceFirm['id'] = sanitize_text_field($_POST['wp360_invoice_firm_id']);
         $invoiceFirm['name'] = sanitize_text_field($_POST['wp360_invoice_firm']);
@@ -21,6 +23,19 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
         
         $invoiceFirm['logo_url'] = isset($_POST['wp360_invoice_firm_logo']) ? esc_url($_POST['wp360_invoice_firm_logo']) : '';
         $invoiceFirm['text_logo'] = isset($_POST['wp360_invoice_firm_text_logo']) ? sanitize_text_field($_POST['wp360_invoice_firm_text_logo']) : '';
+   
+        if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+            foreach ($saved_invoice_firm as $firm) {
+                if (!empty($invoiceFirm) && isset($firm['id']) && ($firm['id'] == $invoiceFirm['id'] )) {
+                    $invFirm = $firm;
+                    $invoiceAddress = isset($invFirm['addresses'][0]) ? $invFirm['addresses'][0]: "";
+                    $invoiceBank    = isset($invFirm['bank_details'][0])  ? $invFirm['bank_details'][0] : "";
+                    break;
+                }
+            }
+        }
+
+
     }
 
     if ( isset( $_POST['items'] ) && is_array( $_POST['items'] ) ) {
@@ -50,6 +65,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                     'invoice_status' => 'unpaid',
                     'invoice_address' => $invoiceAddress,
                     'invoice_bank' => $invoiceBank,
+                    'invoice_currency'    => $invoiceCurrency,   // ← stored per invoice
                     'invoice_createddate'=>gmdate('Y-m-d h:i:s'),
                     'invoice_firm'=> $invoiceFirm,
                 ]
@@ -63,6 +79,11 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
         echo '<div class="error"><p>' . esc_html__('Security check failed.', 'wp360-invoice') . '</p></div>';
     }       
 }
+
+$currency_list_raw  = get_option('wp360_currency_list');
+$currency_options   = array_filter(array_map('trim', explode("\n", $currency_list_raw)));
+$default_currency   = get_option('wp360_selected_currency', 'USD');
+
 ?>
 
 <div class="wp360-invoice-addInvoice">
@@ -73,7 +94,7 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
         </div>
         <div class="invoiceFormInn">
             <select name="invoice_user" id="" class="selectFieldStyle halfWidth" required>
-                <option value=""><?php esc_html_e('Select user', 'wp360-invoice'); ?></option>
+                <option value=""><?php esc_html_e('Select Customer', 'wp360-invoice'); ?></option>
                 <?php
                     $customers = wp360invoice_wooCustomersList();
                     if ($customers && is_array($customers) && !empty($customers)) {
@@ -86,7 +107,29 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                     }
                 ?>
             </select>
-            <input type="number" name="invoice_amount" required placeholder="<?php esc_attr_e('Invoice Total Amount', 'wp360-invoice'); ?>" id="totalAmountField" readonly class="textFieldStyle disableField halfWidth">
+            <div class="selectWrapper halfWidth">
+                <select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>                
+                <?php
+                    $saved_invoice_firm = get_option('wp360_firm_details', array());
+                    if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+                        echo '<option value="">' . esc_html__("Bill To", "wp360-invoice") . '</option>';
+                        foreach ($saved_invoice_firm as $index => $firm) {
+                            echo '<option value="'.wp_kses($firm['firm_name'], $allowed_html).'"'. ' data-logo="'. esc_attr($firm['logo_url']) .'" data-firm-id="'. esc_attr($firm['id']) .'" data-tagline="'. esc_attr($firm['tagline']) .'" data-text-logo="'. esc_attr($firm['text_logo']) .'">'.esc_html($firm['firm_name']).'</option>';
+                        }
+                    }
+                    else{
+                        echo '<option value="">' . esc_html__("No details availble.", "wp360-invoice") . '</option>';
+                    }
+                ?>
+                </select>
+                <input type="hidden" name="wp360_invoice_firm_id" id="firm_id" value="">
+                <input type="hidden" name="wp360_invoice_firm_logo" id="firm_logo" value="">
+                <input type="hidden" name="wp360_invoice_firm_tagline" id="firm_tagline" value="">
+                <input type="hidden" name="wp360_invoice_firm_text_logo" id="firm_text_logo" value="">
+                <!-- <div class="wp360_invoice_addInvoiceDetails">
+                    <a href="<?php //echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link"><?php //esc_html_e('Add Firm Details', 'wp360-invoice'); ?></a>                
+                </div> -->
+            </div>
         </div>
         <div class="invoiceFormInn radioButtonCon">
             <h3><?php esc_html_e('Invoice Type', 'wp360-invoice'); ?></h3>
@@ -101,76 +144,31 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 </label>
             </div>
         </div>
-        <div class="invoiceFormInn">
-            <div class="selectWrapper fullWidth">
-                <h3><?php esc_html_e('Firm/ Business', 'wp360-invoice'); ?></h3>
-                <select name="wp360_invoice_firm" id="wp360_invoice_firm" class="selectFieldStyle fullWidth" required>                
-                <?php
-                    $saved_invoice_firm = get_option('wp360_firm_details', array());
-                    if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
-                        echo '<option value="">' . esc_html__("Select firm details", "wp360-invoice") . '</option>';
-                        foreach ($saved_invoice_firm as $index => $firm) {
-                            echo '<option value="'.wp_kses($firm['firm_name'], $allowed_html).'"'. ' data-logo="'. esc_attr($firm['logo_url']) .'" data-firm-id="'. esc_attr($firm['id']) .'" data-tagline="'. esc_attr($firm['tagline']) .'" data-text-logo="'. esc_attr($firm['text_logo']) .'">'.esc_html($firm['firm_name']).'</option>';
-                        }
-                    }
-                    else{
-                        echo '<option value="">' . esc_html__("No firm/business details availble.", "wp360-invoice") . '</option>';
-                    }
-                ?>
-                </select>
-                <input type="hidden" name="wp360_invoice_firm_id" id="firm_id" value="">
-                <input type="hidden" name="wp360_invoice_firm_logo" id="firm_logo" value="">
-                <input type="hidden" name="wp360_invoice_firm_tagline" id="firm_tagline" value="">
-                <input type="hidden" name="wp360_invoice_firm_text_logo" id="firm_text_logo" value="">
-                <div class="wp360_invoice_addInvoiceDetails">
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link"><?php esc_html_e('Add Firm Details', 'wp360-invoice'); ?></a>                
-                </div>
-            </div>
-        </div>
-        <div class="invoiceFormInn">
+
+        <!-- Currency Start -->
+       <div class="invoiceFormInn">
             <div class="selectWrapper halfWidth">
-                <h3><?php esc_html_e('Address', 'wp360-invoice'); ?></h3>
-                <select name="invoice_address" id="" class="selectFieldStyle fullWidth" required>
-                    <?php
-                        $saved_invoice_addresses = get_option('wp360_invoice_addresses', array());
-                        if ($saved_invoice_addresses && is_array($saved_invoice_addresses) && !empty($saved_invoice_addresses)) {
-                            echo '<option value="">' . esc_html__("Select address", "wp360-invoice") . '</option>';
-                            foreach ($saved_invoice_addresses as $index => $address) {                            
-                                echo '<option value="'.wp_kses($address, $allowed_html).'">'.esc_html($address).'</option>';
-                            }
-                        }
-                        else{
-                            echo '<option value="">' . esc_html__("No addresses availble.", "wp360-invoice") . '</option>';
-                        }
-                    ?>
-                </select>
-                <div class="wp360_invoice_addInvoiceDetails">
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link">
-                        <?php esc_html_e('Add Address', 'wp360-invoice'); ?>
-                    </a>                        
-                </div>
+                <h3><?php esc_html_e('Currency', 'wp360-invoice'); ?></h3>
+                <?php if (!empty($currency_options)) : ?>
+                    <select name="invoice_currency" id="invoice_currency" class="selectFieldStyle fullWidth" required>
+                        <?php foreach ($currency_options as $cur) : ?>
+                            <option value="<?php echo esc_attr($cur); ?>" <?php selected($cur, $default_currency); ?>>
+                                <?php echo esc_html($cur); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php else : ?>
+                    <input type="hidden" name="invoice_currency" value="<?php echo esc_attr($default_currency); ?>">
+                <?php endif; ?>
             </div>
             <div class="selectWrapper halfWidth">
-                <h3><?php esc_html_e('Bank Details', 'wp360-invoice'); ?></h3>
-                <select name="invoice_bank" id="" class="selectFieldStyle fullWidth">                
-                    <?php
-                        $saved_invoice_banking = get_option('wp360_invoice_banking', array());
-                        if ($saved_invoice_banking && is_array($saved_invoice_banking) && !empty($saved_invoice_banking)) {
-                            echo '<option value="">' . esc_html__("Select bank details", "wp360-invoice") . '</option>';
-                            foreach ($saved_invoice_banking as $index => $bank) {                            
-                                echo '<option value="'.wp_kses($bank, $allowed_html).'">'.esc_html($bank).'</option>';
-                            }
-                        }
-                        else{
-                            echo '<option value="">' . esc_html__("No bank details availble.", "wp360-invoice") . '</option>';
-                        }
-                    ?>
-                </select>
-                <div class="wp360_invoice_addInvoiceDetails">
-                    <a href="<?php echo esc_url(admin_url('admin.php?page=wp360-invoice-settings')); ?>" class="wp360_invoice_settings_link"><?php esc_html_e('Add Bank Details', 'wp360-invoice'); ?></a>                
-                </div>
+                <h3><?php esc_html_e('Total', 'wp360-invoice'); ?></h3>
+                <input type="number" width="100%"  name="invoice_amount" required placeholder="<?php esc_attr_e('Invoice Total Amount', 'wp360-invoice'); ?>" id="totalAmountField" readonly class="textFieldStyle disableField">
             </div>
         </div>
+        <!-- Currency End -->
+
+
         <div class="invoiceFormInn wp360_invoice_itemsCon">
             <div class="wp360_invoiceItem">
                 <input type="text" name="items[0][description]" required class="oneThirdWidth textFieldStyle itemDescField"  placeholder="<?php esc_attr_e('Item Description', 'wp360-invoice'); ?>">
@@ -182,6 +180,9 @@ if ( isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" &
                 <a href="javascript:;" class="wp360_invoice_removeInvoiceItem" style="display:none"><?php esc_html_e('Remove Item/Service', 'wp360-invoice'); ?></a>
             </div>
         </div>
+
+
+
 
         <div class="invoiceFormInn">
             <input type="submit" value="<?php esc_attr_e('Publish', 'wp360-invoice'); ?>" name="create_invoice" class="button is-primary">

@@ -17,10 +17,38 @@ function wp360invoice_showInvoice($invoiceID){
         $invoiceNumber  = esc_html(get_post_meta($invoiceID, 'invoice_number', true));
         $invoiceUserID  = get_post_meta($invoiceID, 'invoice_user', true);
         $invoiceUser = get_userdata($invoiceUserID);
-        $currency = '';
-        if (class_exists('WooCommerce')) {
-            $currency = get_woocommerce_currency_symbol();
+        // $currency = '';
+        // if (class_exists('WooCommerce')) {
+        //     $currency = get_woocommerce_currency_symbol();
+        // }
+
+        // Currency: prefer plugin setting, fall back to WooCommerce
+        // -------------------------------------------------------
+        // Currency: per-invoice meta → global default → 'USD'
+        $currency = get_post_meta($invoiceID, 'invoice_currency', true) .' ';
+        if (empty($currency)) {
+            $currency = get_option('wp360_selected_currency', 'USD') .' ';
         }
+
+ 
+
+        // -------------------------------------------------------
+        // Firm Details — resolve by firm ID stored on the invoice
+        // -------------------------------------------------------
+        $saved_invoice_firm  = get_option('wp360_firm_details', array());
+       // echo '<pre>', print_r( $saved_invoice_firm  , true ); echo '</pre>';
+        $invFirm             = get_post_meta($invoiceID, 'invoice_firm', true);
+
+        // echo '<pre>', print_r( $saved_invoice_firm  , true ); echo '</pre>';
+        if ($saved_invoice_firm && is_array($saved_invoice_firm) && !empty($saved_invoice_firm)) {
+            foreach ($saved_invoice_firm as $firm) {
+                if (!empty($invFirm) && isset($firm['id']) && ($firm['id'] == $invFirm['id'])) {
+                    $invFirm = $firm;
+                    break;
+                }
+            }
+        }
+
         $userID         = get_current_user_id();
         $userData       = get_userdata($userID);
         $companyEmail          = $userData->user_email;
@@ -36,6 +64,8 @@ function wp360invoice_showInvoice($invoiceID){
         $custPostCode   = esc_html(get_user_meta($invoiceUserID, 'billing_postcode', true));
         $custPhone   = esc_html(get_user_meta($invoiceUserID, 'billing_phone', true));
         $custEmail   = esc_html(get_userdata($invoiceUserID)->user_email);
+
+
         #Customer Data Ends
         $addressParts = [];
         if (!empty($custLine1)) {
@@ -73,6 +103,10 @@ function wp360invoice_showInvoice($invoiceID){
         if($invoicetype == 'fixed'){
             $invoicetype = 'Items';
         }
+
+        $invoiceAddress  = get_post_meta($invoiceID, 'invoice_address', true);
+        $invoiceBank     = get_post_meta($invoiceID, 'invoice_bank', true);
+
     ?>         
         <div class="wp360Invoice_sp_wrapper">
             <div class="wp360invpdf_loader"><span class="wp360inv_loader"></span></div>
@@ -115,7 +149,7 @@ function wp360invoice_showInvoice($invoiceID){
                         <input type="file" id="paymentReceipt" name="paymentReceipt" accept=".pdf, .jpg, .jpeg" required>
                         <input type="hidden" id="invoiceID" name="invoiceID" value="<?php echo $invoiceID; ?>">
                         <button type="submit" class="siteBtn"><?php _e('Submit', 'text-domain'); ?></button>
-                        <button type="button" class="closeReceiptModal""><?php _e('Cancel', 'text-domain'); ?></button>
+                        <button type="button" class="closeReceiptModal"><?php _e('Cancel', 'text-domain'); ?></button>
                     </form>
                 </div>
             </div>        
@@ -158,10 +192,9 @@ function wp360invoice_showInvoice($invoiceID){
                 <div class="invoceHead2">
                     <div class="companyInfo">
                         <?php
-                            $saved_company_address = get_post_meta($invoiceID, 'invoice_address', true);
-                            if($saved_company_address){
+                            if(!empty($invoiceAddress)){
                                 echo '<h4>'. esc_html__( 'Address','wp360-invoice' ) .'</h4>';
-                                echo '<p class="pre_line">'.wp_kses_post($saved_company_address).'</p>';
+                                echo '<p class="pre_line">'.wp_kses_post($invoiceAddress).'</p>';
                             }
                         ?>                    
                         <!-- <p>
@@ -233,15 +266,13 @@ function wp360invoice_showInvoice($invoiceID){
                     </table>
                 </div>
                 <div class="invoiceFooter">
-                    <?php 
-                        $invoiceBank = get_post_meta($invoiceID, 'invoice_bank', true);
-                        if(!empty($invoiceBank)){ ?>
-                            <div class="bankDetail">
-                                <h3><?php echo esc_html__('Bank Details', 'text-domain'); ?></h3>
-                                <?php echo '<div class="pre_line">' . wp_kses_post($invoiceBank) . '</div>'; ?>
-                            </div>
-                        <?php }                
-                    ?>                 
+                    <?php if(!empty($invoiceBank)){?>
+                        <div class="bankDetail">
+                            <h3><?php echo esc_html__('Bank Details', 'text-domain'); ?></h3>
+                            <?php echo '<div class="pre_line">' . wp_kses_post($invoiceBank) . '</div>'; ?>
+                        </div>
+                    <?php } ?>
+                                 
                     <div class="infoTotalCon">
                         <div class="totalInn1">
                             <strong><?php esc_html_e('Subtotal', 'wp360-invoice');?></strong>
