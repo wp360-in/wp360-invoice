@@ -54,6 +54,7 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
 
                 $invoiceAddress  = get_post_meta($invoice->ID, 'invoice_address', true);
                 $invoiceBank     = get_post_meta($invoice->ID, 'invoice_bank', true);
+                $invoice_paymentnotes     = get_post_meta($invoice->ID, 'invoice_paymentnotes', true);
             
                 $data[] = array(
                     'ID'               => $invoice->ID,
@@ -66,7 +67,8 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                     'invoice_bank'   => !empty($invoiceBank) ? $invoiceBank : 'N/A' ,
                     'invoice_type'     => sanitize_text_field(ucfirst(get_post_meta($invoice->ID, 'invoice_type', true))),
                     'invoice_status'     => !empty($invoiceStatus) ? ucwords($invoiceStatus) : 'N/A',
-                    'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="#" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
+                    'invoice_paymentnotes'     => !empty($invoice_paymentnotes) ? ucwords($invoice_paymentnotes) : 'N/A',
+                    'invoice_receipt'     => !empty($invoiceReceipt) ? '<a href="'.$invoiceReceipt.'" target="_blank" data-image="'.$invoiceReceipt.'">'.__('View', 'text-domain').'</a>' : 'N/A',
                     'invoice_download'     => '<div style="display: inline-block; text-align:center;"><a href="#" class="admin-wp360invoice_download button wp-element-button bordered-button" data-invoice-id="'.$invoice->ID.'" data-invoice-name="'.sanitize_text_field(get_post_meta($invoice->ID, 'invoice_number', true)).'">'.__('Download', 'text-domain').'</a><br> or <br><a href="'.$this->invoiceURL($invoice,'view').'" class="admin-wp360invoice_view">'.__('View', 'text-domain').'</a></div>',
                 );
                 if (is_admin() && current_user_can('manage_options')) {
@@ -90,6 +92,7 @@ if (!class_exists('WP360INVOICE_Invoices_List_Table')) {
                 'invoice_bank'    => esc_html__('Bank Details', 'wp360-invoice'),
                 'invoice_type'      => esc_html__('Invoice Type', 'wp360-invoice'),
                 'invoice_status'      => esc_html__('Invoice Status', 'wp360-invoice'),
+                'invoice_paymentnotes'      => esc_html__('Payment Notes', 'wp360-invoice'),
                 'invoice_receipt'      => esc_html__('Receipt', 'wp360-invoice'),
                 'invoice_download'      => esc_html__('Download/View PDF', 'wp360-invoice'),
                 // 'actions' => esc_html__('Action', 'wp360-invoice')
@@ -196,11 +199,31 @@ if(
             wp360invoice_display_invoices_list_table();
         ?>
     </form>
-    <div id="wp360_invoice_receipt_modal" class="modal">
+    <!-- <div id="wp360_invoice_receipt_modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <img id="modalImage" src="" alt="Image" />
         </div>
+    </div> -->
+
+<div id="wp360_invoice_receipt_modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+
+        <!-- Image Preview -->
+        <img id="modalImage" src="" style="display:none; max-width:100%;" />
+
+        <!-- PDF Preview -->
+        <iframe id="modalPDF" style="display:none; width:100%; height:600px;"></iframe>
+
+        <!-- Fallback (download) -->
+        <a id="modalDownload" href="#" target="_blank" style="display:none;">
+            Download File
+        </a>
     </div>
+</div>
+
+
+
 </div>
 

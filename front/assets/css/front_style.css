@@ -6,8 +6,7 @@
   background-color: #fff;
   color: #000;
   margin: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   padding: 50px 60px 60px;
   color: #525252;
   margin-inline: auto;
@@ -28,12 +27,8 @@
   margin-top: 0;
 }
 .wp360InvoiceCon .invoiceHead {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 .wp360InvoiceCon .invoiceHead .invoceCompanyInfo h4 {
   margin: 0px;
@@ -53,12 +48,8 @@
   line-height: 25px;
 }
 .wp360InvoiceCon .invoceHead2 {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   font-size: 14px;
   line-height: 25px;
   margin-top: 25px;
@@ -106,15 +97,9 @@
 }
 .wp360InvoiceCon .invoiceFooter {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 .wp360InvoiceCon .invoiceFooter .textCon {
   padding: 10px 5px 10px 0;
@@ -138,18 +123,13 @@
 .wp360InvoiceCon .invoiceFooter .infoTotalCon {
   width: 100%;
   max-width: 280px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
   padding-left: 40px;
   margin-left: auto;
 }
 .wp360InvoiceCon .invoiceFooter .infoTotalCon div {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   text-align: center;
   font-size: 16px;
@@ -182,18 +162,13 @@
 }
 
 .wp360invoice_btma {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
   padding: 10px 20px;
   background: #fff;
   border: 1px solid #e4eaee;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   gap: 8px;
   font-size: 1rem;
-  -webkit-transition: 0.3s ease background-color;
   transition: 0.3s ease background-color;
 }
 .wp360invoice_btma:hover {
@@ -205,8 +180,7 @@
   margin: 0px;
   font-size: 1rem;
   border-radius: 10px;
-  -webkit-box-shadow: 0 0 0px 1px #d7d7d7;
-          box-shadow: 0 0 0px 1px #d7d7d7;
+  box-shadow: 0 0 0px 1px #d7d7d7;
 }
 .wp360invoiceSummaryTable thead th {
   text-align: left;
@@ -235,26 +209,19 @@
   list-style: none;
 }
 .wp360invoiceSummaryTable .wp360InvoiceSummary li {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
   padding-bottom: 15px;
   margin-bottom: 15px;
   border-bottom: solid 1px #d7d7d7;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
+  flex-wrap: nowrap;
   gap: 10px;
 }
 .wp360invoiceSummaryTable .wp360InvoiceSummary li:last-child {
   border-bottom: none;
 }
 .wp360invoiceSummaryTable .wp360InvoiceSummary li .itemDesc {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 .wp360invoiceSummaryTable .wp360InvoiceSummary li .itemQty {
   font-weight: bold;
@@ -263,16 +230,10 @@
 .wp360invoiceSummaryTable--pagination {
   font-size: 1rem;
   margin-block: 1rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   gap: 10px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   line-height: normal;
 }
 .wp360invoiceSummaryTable--pagination span[aria-current=page] {
@@ -280,52 +241,32 @@
   padding-inline: 10px;
   border-radius: 50px;
   background: #E4EAEE;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   line-height: 0px;
   font-weight: 600;
 }
 
 .wp360Invoice_action_buttons_wrap {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 6px 15px;
 }
 
 .wp360Invoice_action_buttons {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 6px 12px;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  justify-content: flex-end;
   padding-bottom: 12px;
   border-bottom: 1px solid #d2d2d2;
   font-size: 16px;
 }
 .wp360Invoice_action_buttons._justify {
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  justify-content: space-between;
 }
 .wp360Invoice_action_buttons .wp360invoice_btma {
   margin-right: auto;
@@ -333,7 +274,6 @@
 .wp360Invoice_action_buttons #wp360-invoice_printinvoice, .wp360Invoice_action_buttons .wp360_invoice_status_update, .wp360Invoice_action_buttons .view_receipt {
   background: #fff;
   border: 1px solid #0c173b;
-  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
   padding: 4px 12px;
@@ -350,17 +290,10 @@
   text-decoration: none !important;
 }
 .wp360Invoice_action_buttons .wp360_invoice_status {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
   font-weight: 600;
 }
@@ -377,15 +310,9 @@
   color: #fff;
   font-weight: 500;
   font-size: 1.25rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
 }
 .wp360Invoice_action_buttons .wp360_invoice_status i:before {
@@ -408,32 +335,25 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   padding: 20px;
   z-index: 1000;
 }
 #receiptPopup .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
+  padding: 45px;
+  border: none;
   max-width: 32em;
 }
 #receiptPopup form {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   gap: 15px;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 #receiptPopup form label {
-  font-size: clamp(20px, 3vw, 26px);
+  font-size: 18px;
   font-weight: 600;
 }
 #receiptPopup form input[type=file] {
@@ -441,9 +361,13 @@
 }
 #receiptPopup button {
   cursor: pointer;
-  border-radius: 6px;
   padding: 12px 20px;
-  border: none;
+  border-radius: 0;
+  border: none !important;
+  box-shadow: none;
+  outline: none;
+  font-weight: 600;
+  font-size: 16px;
 }
 #receiptPopup button:not(.siteBtn) {
   background: #e8e8e8;
@@ -454,7 +378,6 @@
   background-color: #0c173b;
   border-radius: 6px;
   color: #FFF;
-  -webkit-transition: ease background-color 0.3s, ease filter 0.3s, ease transform 0.3s;
   transition: ease background-color 0.3s, ease filter 0.3s, ease transform 0.3s;
   border: none;
 }
@@ -477,9 +400,7 @@
   background-color: #fefefe;
   margin: clamp(50px, 5vw, 5vw) auto;
   border: 1px solid #888;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: 100%;
   text-align: center;
   position: relative;
   max-width: min(100% - 30px, 750px);
@@ -504,15 +425,9 @@
   text-decoration: none;
   cursor: pointer;
   line-height: 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .wp360Invoice_sp_wrapper {
@@ -520,12 +435,8 @@
 }
 .wp360Invoice_sp_wrapper .wp360invpdf_loader {
   background-color: rgba(255, 255, 255, 0.5);
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   inset: 0px;
   width: 100%;
@@ -533,8 +444,6 @@
   display: none;
 }
 .wp360Invoice_sp_wrapper .wp360invpdf_loader.active {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 .wp360Invoice_sp_wrapper .wp360invpdf_loader .wp360inv_loader {
@@ -543,29 +452,15 @@
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  -webkit-animation: wp360_spin_anim 2s linear infinite;
-          animation: wp360_spin_anim 2s linear infinite;
-}
-
-@-webkit-keyframes wp360_spin_anim {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
+  animation: wp360_spin_anim 2s linear infinite;
 }
 
 @keyframes wp360_spin_anim {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 .admin-wp360invoice_download {
@@ -574,6 +469,139 @@
 
 .wp360Invoice_sp_wrapper {
   position: relative;
+}
+
+#receiptPopup.modal .modal-content {
+  position: relative;
+  background: #ffffff;
+  width: 100%;
+  max-width: 460px;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: receiptPopupIn 0.2s ease-out;
+}
+#receiptPopup.modal .modal-close-icon {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+#receiptPopup.modal .modal-close-icon:hover {
+  color: #1f2937;
+}
+#receiptPopup.modal .modal-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+#receiptPopup.modal .modal-subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+#receiptPopup.modal .form-group {
+  margin-bottom: 1.25rem;
+}
+#receiptPopup.modal .form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+#receiptPopup.modal .form-group label .required {
+  color: #dc2626;
+}
+#receiptPopup.modal .form-group input[type=file],
+#receiptPopup.modal .form-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+#receiptPopup.modal .form-group input[type=file]:focus,
+#receiptPopup.modal .form-group textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+#receiptPopup.modal .form-group input[type=file].input-error,
+#receiptPopup.modal .form-group textarea.input-error {
+  border-color: #dc2626;
+}
+#receiptPopup.modal .form-group input[type=file].input-error:focus,
+#receiptPopup.modal .form-group textarea.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+#receiptPopup.modal .form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+  font-family: inherit;
+}
+#receiptPopup.modal .form-group .field-error {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #dc2626;
+  min-height: 1em;
+}
+#receiptPopup.modal .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+#receiptPopup.modal .siteBtn {
+  padding: 0.6rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+#receiptPopup.modal .siteBtn--primary {
+  background: #2563eb;
+  color: #fff;
+}
+#receiptPopup.modal .siteBtn--primary:hover {
+  background: #1d4ed8;
+}
+#receiptPopup.modal .siteBtn--ghost {
+  background: transparent;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+#receiptPopup.modal .siteBtn--ghost:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+@keyframes receiptPopupIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+#charCount {
+  font-size: 14px;
+  margin: 0;
 }
 
 @media print {

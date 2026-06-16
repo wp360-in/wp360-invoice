@@ -319,7 +319,71 @@ $color1 : #007cba;
         cursor: pointer;
     }    
 }
-
+.wp360Invoice_action_buttons_wrap{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 15px;
+}
+.wp360Invoice_action_buttons{
+    border-bottom:  none!important;
+    &._justify{
+        justify-content: space-between;
+    }
+    .wp360invoice_btma{
+        margin-right: auto;
+    }
+    #wp360-invoice_printinvoice, .wp360_invoice_status_update, .view_receipt {
+        background: #fff;
+        border: 1px solid #0c173b;
+        max-width: fit-content;
+        padding: 4px 12px;
+        cursor: pointer;
+        color: #0c173b;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        line-height: 1.5;
+        font-weight: 600;
+    }
+    .wp360_invoice_status_update, .view_receipt{
+        background: #e4eaee;
+        border: 1px solid #e4eaee;
+        text-decoration: none !important;
+    }
+    .wp360_invoice_status{
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 600;
+        &.paid{
+            i{
+                background-color: #22a753;
+                &:before{
+                    content: "\f147";
+                }
+            }
+        }
+        i{
+            background-color: #c32525;
+            &:before{
+                font-family: "Dashicons";
+                font-style: normal;
+                content: "\f158";
+            }           
+            height: 1.625rem;
+            width: 1.625rem;
+            color: #fff;
+            font-weight: 500;
+            font-size: 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;           
+        }
+    }
+}
 @media(max-width: 767px){
     #wp360_invoice-settings-form{
         fieldset{            
@@ -348,4 +412,10 @@ $color1 : #007cba;
         position: relative;
         margin: auto;
     }
+}
+
+
+
+.wp360Invoice_action_buttons_admin{
+    margin-left: 15px;
 }

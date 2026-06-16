@@ -184,44 +184,117 @@ add_action( 'wp_enqueue_scripts', function() {
     }
 });
 
-function wp360invoice_handle_mark_invoice_as_paid() {
-    if (isset($_POST['wp360invoice_mark_invoice_paid_nonce'])) {
-        if (!wp_verify_nonce($_POST['wp360invoice_mark_invoice_paid_nonce'], 'wp360invoice_mark_invoice_paid')) {
-            wp_die(__('Nonce verification failed', 'text-domain'));
-        }
 
-        if (isset($_FILES['paymentReceipt']) && isset($_POST['invoiceID'])) {
-            $invoiceID = intval($_POST['invoiceID']);
-            $receipt = $_FILES['paymentReceipt'];
 
-            $allowed_types = ['application/pdf', 'image/jpeg', 'image/jpg'];
-            if (!in_array($receipt['type'], $allowed_types)) {
-                wp_die(__('Invalid file type', 'text-domain'));
-            }
 
-            $upload_dir = wp_upload_dir();
-            $target_dir = $upload_dir['basedir'] . '/wp360invoices/receipts/';
-            if (!file_exists($target_dir)) {
-                wp_mkdir_p($target_dir);
-            }
-
-            $target_file = $target_dir . basename($receipt['name']);
-            if (move_uploaded_file($receipt['tmp_name'], $target_file)) {
-                // Store the file URL as post meta
-                $file_url = $upload_dir['baseurl'] . '/wp360invoices/receipts/' . basename($receipt['name']);
-                update_post_meta($invoiceID, 'invoice_status', 'paid');
-                update_post_meta($invoiceID, 'payment_receipt', $file_url);
-
-                wp_safe_redirect(add_query_arg('message', 'Invoice marked as paid', wp_get_referer()));
-                exit;
-            } else {
-                wp_die(__('Failed to upload file', 'text-domain'));
-            }
-        } else {
-            wp_die(__('Missing required data', 'text-domain'));
-        }
-    } else {
-        wp_die(__('Nonce not set', 'text-domain'));
-    }
+add_action('admin_post_wp360invoice_mark_invoice_as_paidAdmin', 'wp360invoice_mark_invoice_as_paid');
+function wp360invoice_mark_invoice_as_paid() {
+    wp360invoice_handle_mark_paid(array(
+        'nonce_field'   => 'wp360invoice_mark_invoice_as_paidAdmin_nonce',
+        'nonce_action'  => 'wp360invoice_mark_invoice_as_paidAdmin_action',
+        'is_admin'      => true,
+    ));
 }
-add_action('admin_post_wp360invoice_mark_invoice_as_paid', 'wp360invoice_handle_mark_invoice_as_paid');
+
+add_action('admin_post_wp360invoice_mark_invoice_as_paidUser', 'wp360invoice_mark_invoice_as_paid_user');
+function wp360invoice_mark_invoice_as_paid_user() {
+    wp360invoice_handle_mark_paid(array(
+        'nonce_field'   => 'wp360invoice_mark_invoice_paid_nonce',
+        'nonce_action'  => 'wp360invoice_mark_invoice_paid',
+        'is_admin'      => false,
+    ));
+}
+
+/**
+ * Common handler for marking an invoice as paid (admin + user contexts).
+ */
+function wp360invoice_handle_mark_paid($args) {
+    $nonce_field  = $args['nonce_field'];
+    $nonce_action = $args['nonce_action'];
+    $is_admin     = !empty($args['is_admin']);
+
+    if (
+        !isset($_POST[$nonce_field]) ||
+        !wp_verify_nonce($_POST[$nonce_field], $nonce_action)
+    ) {
+        wp_die('Nonce verification failed');
+    }
+
+    $invoice_id = isset($_POST['invoiceID']) ? intval($_POST['invoiceID']) : 0;
+
+    if (!function_exists('wp_handle_upload')) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+    }
+
+    // Save notes (common to both)
+    $notes = isset($_POST['paymentNotes']) ? sanitize_textarea_field($_POST['paymentNotes']) : '';
+    if (!empty($notes)) {
+        update_post_meta($invoice_id, 'invoice_paymentnotes', $notes);
+    }
+
+    // Handle file upload (only admin uses custom upload dir + restricted mimes)
+    if (isset($_FILES['paymentReceipt']) && !empty($_FILES['paymentReceipt']['name'])) {
+        $file = $_FILES['paymentReceipt'];
+        $file['name'] = time() . '-' . sanitize_file_name($file['name']);
+
+        $upload_overrides = array('test_form' => false);
+
+        if ($is_admin) {
+            $allowed_types = array(
+                'pdf'  => 'application/pdf',
+                'jpg'  => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'png'  => 'image/png',
+            );
+            $upload_overrides['mimes'] = $allowed_types;
+            add_filter('upload_dir', 'wp360invoice_custom_upload_dir');
+        }
+
+        $movefile = wp_handle_upload($file, $upload_overrides);
+
+        if ($is_admin) {
+            remove_filter('upload_dir', 'wp360invoice_custom_upload_dir');
+        }
+
+        if ($movefile && !isset($movefile['error'])) {
+            update_post_meta($invoice_id, 'payment_receipt', $movefile['url']);
+            update_post_meta($invoice_id, 'invoice_status', 'paid');
+        } elseif (!$is_admin) {
+            wp_die('Upload error: ' . $movefile['error']);
+        }
+    } elseif ($is_admin) {
+        // Admin flow previously marked paid even without a successful upload check;
+        // keep that behavior for backward compatibility.
+        update_post_meta($invoice_id, 'invoice_status', 'paid');
+    }
+
+    // Redirect back
+    if ($is_admin) {
+        $referer = wp_get_referer();
+        if (!$referer) {
+            $referer = admin_url('admin.php?page=wp360_invoice');
+        }
+        $parsed_url = parse_url($referer);
+        $path  = isset($parsed_url['path']) ? basename($parsed_url['path']) : 'admin.php';
+        $query = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+        $final_url = add_query_arg('uploaded', '1', admin_url($path . $query));
+        wp_redirect($final_url);
+    } else {
+        wp_safe_redirect(add_query_arg('uploaded', '1', wp_get_referer()));
+    }
+    exit;
+}
+
+/**
+ * Custom upload directory for admin receipt uploads.
+ */
+function wp360invoice_custom_upload_dir($dirs) {
+    $custom_dir = WP_PLUGIN_DIR . '/wp360-invoice-krishna-wp360/receipt';
+    if (!file_exists($custom_dir)) {
+        wp_mkdir_p($custom_dir);
+    }
+    $dirs['path']   = $custom_dir;
+    $dirs['url']    = plugins_url('wp360-invoice-krishna-wp360/receipt');
+    $dirs['subdir'] = '/receipt';
+    return $dirs;
+}

@@ -210,20 +210,93 @@ jQuery(document).ready(function($) {
             }
         });
     });
-    $('td.invoice_receipt a').on('click', function(e) {
-        e.preventDefault();
-        var imageSrc = $(this).data('image');
-        $('#modalImage').attr('src', imageSrc);
-        $('#wp360_invoice_receipt_modal').fadeIn();
-    });
 
-    $('#wp360_invoice_receipt_modal .close').on('click', function() {
-        $('#wp360_invoice_receipt_modal').fadeOut();
-    });
 
-    $(window).on('click', function(event) {
-        if ($(event.target).is('#wp360_invoice_receipt_modal')) {
-            $('#wp360_invoice_receipt_modal').fadeOut();
-        }
-    });
+$('td.invoice_receipt a').on('click', function(e) {
+    e.preventDefault();
+
+    var fileUrl = $(this).data('image');
+    var extension = fileUrl.split('.').pop().toLowerCase();
+
+    // Reset all
+    $('#modalImage').hide();
+    $('#modalPDF').hide();
+    $('#modalDownload').hide();
+
+    // IMAGE
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+        $('#modalImage').attr('src', fileUrl).show();
+    }
+    // PDF
+    else if (extension === 'pdf') {
+        $('#modalPDF').attr('src', fileUrl).show();
+    }
+    // OTHER FILES
+    else {
+        $('#modalDownload').attr('href', fileUrl).show();
+    }
+
+    $('#wp360_invoice_receipt_modal').fadeIn();
 });
+
+
+// Close modal
+$('#wp360_invoice_receipt_modal .close').on('click', function() {
+    $('#wp360_invoice_receipt_modal').fadeOut();
+});
+
+// Click outside
+$(window).on('click', function(event) {
+    if ($(event.target).is('#wp360_invoice_receipt_modal')) {
+        $('#wp360_invoice_receipt_modal').fadeOut();
+    }
+});
+function wp360invoice_openPopup() {
+    jQuery('#receiptPopup').fadeIn();
+}
+function wp360invoice_closePopup() {
+    jQuery('#receiptPopup').fadeOut();
+}
+jQuery('.wp360_invoice_status_update').click(function(){
+    wp360invoice_openPopup();
+});
+    // Optional: Close the modal if clicking outside of it
+jQuery(window).click(function(event) {
+    if (jQuery(event.target).is('#receiptPopup')) {
+        wp360invoice_closePopup();
+    }
+});
+jQuery('.closeReceiptModal').click(function(){
+    wp360invoice_closePopup();
+});
+
+});
+
+// document.getElementById('receiptForm').addEventListener('submit', function (e) {
+//     let valid = true;
+
+//     const fileInput = document.getElementById('paymentReceipt');
+//     const notesInput = document.getElementById('paymentNotes');
+
+//     const fileError = document.querySelector('[data-error-for="paymentReceipt"]');
+//     const notesError = document.querySelector('[data-error-for="paymentNotes"]');
+
+//     fileError.textContent = '';
+//     notesError.textContent = '';
+//     fileInput.classList.remove('input-error');
+//     notesInput.classList.remove('input-error');
+
+//     if (!fileInput.value) {
+//         fileError.textContent = 'Please upload a receipt.';
+//         fileInput.classList.add('input-error');
+//         valid = false;
+//     }
+
+//     if (!notesInput.value.trim()) {
+//         notesError.textContent = 'Notes are required.';
+//         notesInput.classList.add('input-error');
+//         valid = false;
+//     }
+
+//     if (!valid) e.preventDefault();
+// });
