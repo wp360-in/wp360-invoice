@@ -56,20 +56,70 @@ jQuery(document).ready(function($) {
             wp360invoice_closePopup();
         }
     });
-    $('.view_receipt').on('click', function(e) {
-        e.preventDefault();
-        var imageSrc = $(this).data('image');
-        $('#modalImage').attr('src', imageSrc);
-        $('#wp360_invoice_receipt_modal').fadeIn();
-    });
 
-    $('#wp360_invoice_receipt_modal .close').on('click', function() {
-        $('#wp360_invoice_receipt_modal').fadeOut();
-    });
 
-    $(window).on('click', function(event) {
-        if ($(event.target).is('#wp360_invoice_receipt_modal')) {
-            $('#wp360_invoice_receipt_modal').fadeOut();
-        }
-    });
+    // $('.view_receipt').on('click', function(e) {
+    //     e.preventDefault();
+    //     var imageSrc = $(this).data('image');
+    //     $('#modalImage').attr('src', imageSrc);
+    //     $('#wp360_invoice_receipt_modal').fadeIn();
+    // });
+
+    // $('#wp360_invoice_receipt_modal .close').on('click', function() {
+    //     $('#wp360_invoice_receipt_modal').fadeOut();
+    // });
+
+    // $(window).on('click', function(event) {
+    //     if ($(event.target).is('#wp360_invoice_receipt_modal')) {
+    //         $('#wp360_invoice_receipt_modal').fadeOut();
+    //     }
+    // });
+
+
+$('.view_receipt').on('click', function(e) {
+    e.preventDefault();
+
+    var fileUrl = $(this).data('image');
+    var extension = fileUrl.split('.').pop().toLowerCase();
+
+    // Reset all
+    $('#modalImage').hide();
+    $('#modalPDF').hide();
+    $('#modalDownload').hide();
+
+    // IMAGE
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+        $('#modalImage').attr('src', fileUrl).show();
+    }
+    // PDF
+    else if (extension === 'pdf') {
+        $('#modalPDF').attr('src', fileUrl).show();
+    }
+    // OTHER FILES
+    else {
+        $('#modalDownload').attr('href', fileUrl).show();
+    }
+
+    $('#wp360_invoice_receipt_modal').fadeIn();
 });
+
+
+// Close modal
+$('#wp360_invoice_receipt_modal .close').on('click', function() {
+    $('#wp360_invoice_receipt_modal').fadeOut();
+});
+
+// Click outside
+$(window).on('click', function(event) {
+    if ($(event.target).is('#wp360_invoice_receipt_modal')) {
+        $('#wp360_invoice_receipt_modal').fadeOut();
+    }
+});
+
+
+
+});
+function updateCount() {
+    let text = document.getElementById("paymentNotes").value;
+    document.getElementById("charCount").innerText = text.length + " / 50";
+}

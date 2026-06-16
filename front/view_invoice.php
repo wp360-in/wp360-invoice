@@ -106,6 +106,7 @@ function wp360invoice_showInvoice($invoiceID){
 
         $invoiceAddress  = get_post_meta($invoiceID, 'invoice_address', true);
         $invoiceBank     = get_post_meta($invoiceID, 'invoice_bank', true);
+        $payment_receipt     = get_post_meta($invoiceID, 'payment_receipt', true);
 
     ?>         
         <div class="wp360Invoice_sp_wrapper">
@@ -122,12 +123,13 @@ function wp360invoice_showInvoice($invoiceID){
                     <?php
                         $status = get_post_meta($invoiceID, 'invoice_status', true);
                         $receipt = get_post_meta($invoiceID, 'payment_receipt', true);
+                    //echo '<button type="button" class="wp360_invoice_status_update">'.__('Mark as paid', 'text-domain').'</button>';   
                         if(empty($status) || $status === 'unpaid'){
                             echo '<button type="button" class="wp360_invoice_status_update">'.__('Mark as paid', 'text-domain').'</button>';                        
                         }
                         else{
                             if(!empty($receipt)) {
-                                echo '<a href="#" target="_blank" class="view_receipt" data-image="'.$receipt.'">'.__('View Receipt', 'text-domain').'</a>';
+                                echo '<a href="#" target="_blank" class="view_receipt" data-image="'.$payment_receipt.'">'.__('View Receipt', 'text-domain').'</a>';
                             }
                         }
                     ?>
@@ -140,19 +142,49 @@ function wp360invoice_showInvoice($invoiceID){
                 </div>
             </div>
 
-            <div id="receiptPopup" class="modal">
-                <div class="modal-content">
-                    <form id="receiptForm" method="post" action="<?php echo admin_url('admin-post.php'); ?>" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="wp360invoice_mark_invoice_as_paid">
-                        <?php wp_nonce_field('wp360invoice_mark_invoice_paid', 'wp360invoice_mark_invoice_paid_nonce'); ?>
-                        <label for="paymentReceipt"><?php _e('Upload Receipt (PDF or JPG):', 'text-domain'); ?></label>
-                        <input type="file" id="paymentReceipt" name="paymentReceipt" accept=".pdf, .jpg, .jpeg" required>
-                        <input type="hidden" id="invoiceID" name="invoiceID" value="<?php echo $invoiceID; ?>">
-                        <button type="submit" class="siteBtn"><?php _e('Submit', 'text-domain'); ?></button>
-                        <button type="button" class="closeReceiptModal"><?php _e('Cancel', 'text-domain'); ?></button>
-                    </form>
-                </div>
-            </div>        
+<div id="receiptPopup" class="modal">
+    <div class="modal-content">
+        <button type="button" class="closeReceiptModal modal-close-icon" aria-label="Close">&times;</button>
+
+        <h2 class="modal-title"><?php _e('Submit Payment Receipt', 'text-domain'); ?></h2>
+        <p class="modal-subtitle"><?php _e('Please upload your receipt and add a note for the admin.', 'text-domain'); ?></p>
+
+        <form id="receiptForm" method="post" action="<?php echo admin_url('admin-post.php'); ?>" enctype="multipart/form-data">
+
+            <input type="hidden" name="action" value="wp360invoice_mark_invoice_as_paidUser">
+            <?php wp_nonce_field('wp360invoice_mark_invoice_paid', 'wp360invoice_mark_invoice_paid_nonce'); ?>
+
+            <div class="form-group">
+                <label for="paymentReceipt"><?php _e('Upload Receipt (PDF or JPG)', 'text-domain'); ?> <span class="required">*</span></label>
+                <input type="file" id="paymentReceipt" name="paymentReceipt" accept=".pdf, .jpg, .jpeg" required>
+                <span class="field-error" data-error-for="paymentReceipt"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="paymentNotes"><?php _e('Notes', 'text-domain'); ?> <span class="required">*</span></label>
+                <textarea 
+                id="paymentNotes" 
+                name="paymentNotes" 
+                rows="4" 
+                maxlength="50"
+                oninput="updateCount()"
+                ></textarea>
+
+                <p id="charCount">0 / 50</p>
+                <span class="field-error" data-error-for="paymentNotes"></span>
+            </div>
+
+            <input type="hidden" id="invoiceID" name="invoiceID" value="<?php echo esc_attr($invoiceID); ?>">
+
+            <div class="modal-actions">
+                <button type="button" class="siteBtn siteBtn--ghost closeReceiptModal"><?php _e('Cancel', 'text-domain'); ?></button>
+                <button type="submit" class="siteBtn siteBtn--primary"><?php _e('Submit', 'text-domain'); ?></button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
             <div class="wp360InvoiceCon">
                 <h2><?php esc_html_e('Invoice', 'wp360-invoice');?></h2>
                 <div class="invoiceHead">
@@ -309,9 +341,20 @@ function wp360invoice_showInvoice($invoiceID){
         <div id="wp360_invoice_receipt_modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <img id="modalImage" src="" alt="Image" />
+
+                <!-- Image Preview -->
+                <img id="modalImage" src="" style="display:none; max-width:100%;" />
+
+                <!-- PDF Preview -->
+                <iframe id="modalPDF" style="display:none; width:100%; height:600px;"></iframe>
+
+                <!-- Fallback (download) -->
+                <a id="modalDownload" href="#" target="_blank" style="display:none;">
+                    Download File
+                </a>
             </div>
         </div>
+
     <?php       
     endif;
 }
